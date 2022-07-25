@@ -25552,83 +25552,60 @@
       "project_dashboard_widgets": {
         "value": {
           "summary": {
-            "ranges": {
-              "DY": "Yesterday",
-              "DT": "Today",
-              "DTM": "Tomorrow"
-            },
+            "title": "Projects",
             "currentRange": "DT",
             "data": {
-              "name": "Due Tasks",
+              "name": "New Projects",
               "count": {
                 "DY": 21,
-                "DT": 25,
-                "DTM": 19
+                "DT": 25
               },
               "extra": {
                 "name": "Completed",
                 "count": {
                   "DY": 6,
-                  "DT": 7,
-                  "DTM": "-"
+                  "DT": 7
                 }
               }
             },
             "detail": "You can show some detailed information about this widget in here."
           },
           "overdue": {
-            "title": "Overdue",
+            "title": "Freelancers",
             "data": {
-              "name": "Tasks",
-              "count": 4,
+              "name": "Total Freelancers",
+              "count": 49,
               "extra": {
-                "name": "Yesterday's overdue",
+                "name": "New Freelancers",
                 "count": 2
               }
             },
             "detail": "You can show some detailed information about this widget in here."
           },
           "issues": {
-            "title": "Issues",
+            "title": "Companies",
             "data": {
-              "name": "Open",
+              "name": "Total Companies",
               "count": 32,
               "extra": {
-                "name": "Closed today",
-                "count": 0
+                "name": "New Companies",
+                "count": 1
               }
             },
             "detail": "You can show some detailed information about this widget in here."
           },
-          "features": {
-            "title": "Features",
-            "data": {
-              "name": "Proposals",
-              "count": 42,
-              "extra": {
-                "name": "Implemented",
-                "count": 8
-              }
-            },
-            "detail": "You can show some detailed information about this widget in here."
-          },
+
           "githubIssues": {
             "overview": {
               "this-week": {
                 "new-issues": 214,
-                "closed-issues": 75,
-                "fixed": 3,
-                "wont-fix": 4,
-                "re-opened": 8,
-                "needs-triage": 6
+                "closed-issues": 75
+              
               },
               "last-week": {
                 "new-issues": 197,
-                "closed-issues": 72,
-                "fixed": 6,
-                "wont-fix": 11,
-                "re-opened": 6,
-                "needs-triage": 5
+                "closed-issues": 72
+            
               }
             },
             "ranges": {
@@ -25647,7 +25624,7 @@
             "series": {
               "this-week": [
                 {
-                  "name": "New issues",
+                  "name": "Finished Tasks",
                   "type": "line",
                   "data": [
                     42,
@@ -25658,49 +25635,10 @@
                     25,
                     22
                   ]
-                },
-                {
-                  "name": "Closed issues",
-                  "type": "column",
-                  "data": [
-                    11,
-                    10,
-                    8,
-                    11,
-                    8,
-                    10,
-                    17
-                  ]
                 }
-              ],
-              "last-week": [
-                {
-                  "name": "New issues",
-                  "type": "line",
-                  "data": [
-                    37,
-                    32,
-                    39,
-                    27,
-                    18,
-                    24,
-                    20
-                  ]
-                },
-                {
-                  "name": "Closed issues",
-                  "type": "column",
-                  "data": [
-                    9,
-                    8,
-                    10,
-                    12,
-                    7,
-                    11,
-                    15
-                  ]
-                }
+                
               ]
+           
             }
           },
           "taskDistribution": {
@@ -32637,7 +32575,7 @@
             "password": "admin",
             "role": "admin",
             "data": {
-              "displayName": "Abbott Keitch",
+              "displayName": "Salaheddin El Hamraoui",
               "photoURL": "assets/images/avatars/brian-hughes.jpg",
               "email": "admin@fusetheme.com",
               "settings": {
