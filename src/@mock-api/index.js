@@ -3,6 +3,7 @@ import "./api/notifications-api";
 import "./api/dashboards/project-api";
 import history from "@history";
 import mock from "./mock";
+import "./api/academy-api";
 
 mock.onAny().passThrough();
 

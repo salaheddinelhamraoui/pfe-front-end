@@ -5,6 +5,7 @@ const ProjectDashboardApp = lazy(() => import("./ProjectDashboardApp"));
 const ProjectDashboardAppConfig = {
   settings: {
     layout: {
+      style: "layout2",
       config: {},
     },
   },

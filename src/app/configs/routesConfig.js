@@ -8,6 +8,7 @@ import SignOutConfig from "../main/sign-out/SignOutConfig";
 import Error404Page from "../main/404/Error404Page";
 import ExampleConfig from "../main/example/ExampleConfig";
 import ProjectDashboardAppConfig from "../main/project/ProjectDashboardAppConfig";
+import FreelancerAppConfig from "../freelancers/FreelacerAppConfig";
 
 const routeConfigs = [
   ExampleConfig,
@@ -15,6 +16,7 @@ const routeConfigs = [
   SignOutConfig,
   SignInConfig,
   SignUpConfig,
+  FreelancerAppConfig,
 ];
 
 const routes = [
@@ -26,14 +28,32 @@ const routes = [
     path: "/",
     element: <Navigate to="/project" />,
     auth: settingsConfig.defaultAuth,
+    settings: {
+      layout: {
+        style: "layout2",
+        config: {},
+      },
+    },
   },
   {
     path: "loading",
     element: <FuseLoading />,
+    settings: {
+      layout: {
+        style: "layout2",
+        config: {},
+      },
+    },
   },
   {
     path: "404",
     element: <Error404Page />,
+    settings: {
+      layout: {
+        style: "layout2",
+        config: {},
+      },
+    },
   },
   {
     path: "*",

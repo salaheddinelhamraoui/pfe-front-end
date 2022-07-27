@@ -8,22 +8,50 @@ i18next.addResourceBundle("tr", "navigation", tr);
 i18next.addResourceBundle("ar", "navigation", ar);
 
 const navigationConfig = [
+  // {
+  //   id: "dashboard",
+  //   title: "Dashboard",
+  //   subtitle: "",
+  //   type: "group",
+  //   icon: "heroicons-outline:home",
+  //   translate: "DASHBOARDS",
+  //   children: [
+  //     {
+  //       id: "dashboards.analytics",
+  //       title: "Analytics",
+  //       type: "item",
+  //       icon: "heroicons-outline:clipboard-check",
+  //       url: "/project",
+  //     },
+  //   ],
+  // },
   {
-    id: "dashboard",
-    title: "Dashboard",
-    subtitle: "",
-    type: "group",
-    icon: "heroicons-outline:home",
-    translate: "DASHBOARDS",
-    children: [
-      {
-        id: "dashboards.analytics",
-        title: "Analytics",
-        type: "item",
-        icon: "heroicons-outline:clipboard-check",
-        url: "/project",
-      },
-    ],
+    id: "analytics",
+    title: "Analytics",
+    type: "item",
+    icon: "heroicons-outline:clipboard-check",
+    url: "/project",
+  },
+  {
+    id: "freelancers",
+    title: "Freelancers",
+    type: "item",
+    icon: "heroicons-outline:user-circle",
+    url: "/freelancers",
+  },
+  {
+    id: "companies",
+    title: "Companies",
+    type: "item",
+    icon: "heroicons-outline:office-building",
+    url: "/companies",
+  },
+  {
+    id: "projects",
+    title: "Projects",
+    type: "item",
+    icon: "heroicons-outline:terminal",
+    url: "/projects",
   },
 ];
 
