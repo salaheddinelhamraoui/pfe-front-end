@@ -4,6 +4,7 @@ import "./api/dashboards/project-api";
 import history from "@history";
 import mock from "./mock";
 import "./api/academy-api";
+import "./api/ecommerce-api";
 
 mock.onAny().passThrough();
 

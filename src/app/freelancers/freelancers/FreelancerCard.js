@@ -6,26 +6,13 @@ import { Link } from "react-router-dom";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 import { lighten } from "@mui/material/styles";
 import FreelancerInfo from "../FreelancerInfo";
-import CourseProgress from "../CourseProgress";
 
-function FreelancerCard({ course }) {
-  function buttonStatus() {
-    switch (course.activeStep) {
-      case course.totalSteps:
-        return "Completed";
-      case 0:
-        return "Start";
-      default:
-        return "Continue";
-    }
-  }
-
+function FreelancerCard({ freelancer }) {
   return (
     <Card className="flex flex-col h-384 shadow">
       <CardContent className="flex flex-col flex-auto p-24">
-        <FreelancerInfo course={course} className="" />
+        <FreelancerInfo course={freelancer} className="" />
       </CardContent>
-      <CourseProgress className="" course={course} />
       <CardActions
         className="items-center justify-end py-16 px-24"
         sx={{

@@ -138,10 +138,10 @@ function Freelancers(props) {
                   initial="hidden"
                   animate="show"
                 >
-                  {filteredData.map((course) => {
+                  {filteredData.map((freelancer) => {
                     return (
-                      <motion.div variants={item} key={course.id}>
-                        <FreelancerCard course={course} />
+                      <motion.div variants={item} key={freelancer.id}>
+                        <FreelancerCard freelancer={freelancer} />
                       </motion.div>
                     );
                   })}
