@@ -1,25 +1,25 @@
-import { amber } from '@mui/material/colors';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import Input from '@mui/material/Input';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-import clsx from 'clsx';
-import { motion } from 'framer-motion';
-import { memo, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
-import FuseSvgIcon from '../FuseSvgIcon';
+import { amber } from "@mui/material/colors";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import Input from "@mui/material/Input";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import Tooltip from "@mui/material/Tooltip";
+import Typography from "@mui/material/Typography";
+import clsx from "clsx";
+import { motion } from "framer-motion";
+import { memo, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import FuseSvgIcon from "../FuseSvgIcon";
 
 function FuseShortcuts(props) {
   const { navigation, shortcuts, onChange } = props;
 
   const searchInputRef = useRef(null);
   const [addMenu, setAddMenu] = useState(null);
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [searchResults, setSearchResults] = useState(null);
   const shortcutItems = shortcuts
     ? shortcuts.map((id) => navigation.find((item) => item.id === id))
@@ -40,7 +40,9 @@ function FuseShortcuts(props) {
 
     if (newSearchText.length !== 0 && navigation) {
       setSearchResults(
-        navigation.filter((item) => item.title.toLowerCase().includes(newSearchText.toLowerCase()))
+        navigation.filter((item) =>
+          item.title.toLowerCase().includes(newSearchText.toLowerCase())
+        )
       );
       return;
     }
@@ -61,13 +63,15 @@ function FuseShortcuts(props) {
     }
 
     return (
-      <Link to={item.url || ''} role="button">
+      <Link to={item.url || ""} role="button">
         <MenuItem key={item.id}>
           <ListItemIcon className="min-w-40">
             {item.icon ? (
               <FuseSvgIcon>{item.icon}</FuseSvgIcon>
             ) : (
-              <span className="text-20 font-semibold uppercase text-center">{item.title[0]}</span>
+              <span className="text-20 font-semibold uppercase text-center">
+                {item.title[0]}
+              </span>
             )}
           </ListItemIcon>
           <ListItemText primary={item.title} />
@@ -80,7 +84,9 @@ function FuseShortcuts(props) {
             size="large"
           >
             <FuseSvgIcon color="action">
-              {shortcuts.includes(item.id) ? 'heroicons-solid:star' : 'heroicons-outline:star'}
+              {shortcuts.includes(item.id)
+                ? "heroicons-solid:star"
+                : "heroicons-outline:star"}
             </FuseSvgIcon>
           </IconButton>
         </MenuItem>
@@ -91,8 +97,8 @@ function FuseShortcuts(props) {
   return (
     <div
       className={clsx(
-        'flex flex-1',
-        props.variant === 'vertical' && 'flex-col grow-0 shrink',
+        "flex flex-1",
+        props.variant === "vertical" && "flex-col grow-0 shrink",
         props.className
       )}
     >
@@ -113,7 +119,10 @@ function FuseShortcuts(props) {
             variants={container}
             initial="hidden"
             animate="show"
-            className={clsx('flex flex-1', props.variant === 'vertical' && 'flex-col')}
+            className={clsx(
+              "flex flex-1",
+              props.variant === "vertical" && "flex-col"
+            )}
           >
             {shortcutItems.map(
               (_item) =>
@@ -121,7 +130,9 @@ function FuseShortcuts(props) {
                   <Link to={_item.url} key={_item.id} role="button">
                     <Tooltip
                       title={_item.title}
-                      placement={props.variant === 'horizontal' ? 'bottom' : 'left'}
+                      placement={
+                        props.variant === "horizontal" ? "bottom" : "left"
+                      }
                     >
                       <IconButton
                         className="w-40 h-40 p-0"
@@ -132,7 +143,9 @@ function FuseShortcuts(props) {
                         {_item.icon ? (
                           <FuseSvgIcon>{_item.icon}</FuseSvgIcon>
                         ) : (
-                          <span className="text-20 font-semibold uppercase">{_item.title[0]}</span>
+                          <span className="text-20 font-semibold uppercase">
+                            {_item.title[0]}
+                          </span>
                         )}
                       </IconButton>
                     </Tooltip>
@@ -142,18 +155,20 @@ function FuseShortcuts(props) {
 
             <Tooltip
               title="Click to add/remove shortcut"
-              placement={props.variant === 'horizontal' ? 'bottom' : 'left'}
+              placement={props.variant === "horizontal" ? "bottom" : "left"}
             >
               <IconButton
                 component={motion.div}
                 variants={item}
                 className="w-40 h-40 p-0"
-                aria-owns={addMenu ? 'add-menu' : null}
+                aria-owns={addMenu ? "add-menu" : null}
                 aria-haspopup="true"
                 onClick={addMenuClick}
                 size="large"
               >
-                <FuseSvgIcon sx={{ color: amber[600] }}>heroicons-solid:star</FuseSvgIcon>
+                <FuseSvgIcon sx={{ color: amber[600] }}>
+                  heroicons-solid:star
+                </FuseSvgIcon>
               </IconButton>
             </Tooltip>
           </motion.div>
@@ -166,14 +181,14 @@ function FuseShortcuts(props) {
         open={Boolean(addMenu)}
         onClose={addMenuClose}
         classes={{
-          paper: 'min-w-256',
+          paper: "min-w-256",
         }}
         TransitionProps={{
           onEntered: () => {
             searchInputRef.current.focus();
           },
           onExited: () => {
-            setSearchText('');
+            setSearchText("");
           },
         }}
       >
@@ -182,11 +197,11 @@ function FuseShortcuts(props) {
             inputRef={searchInputRef}
             value={searchText}
             onChange={search}
-            placeholder="Search for an app or page"
+            placeholder="Search for a page"
             className=""
             fullWidth
             inputProps={{
-              'aria-label': 'Search',
+              "aria-label": "Search",
             }}
             disableUnderline
           />
@@ -228,7 +243,7 @@ function FuseShortcuts(props) {
 
 FuseShortcuts.propTypes = {};
 FuseShortcuts.defaultProps = {
-  variant: 'horizontal',
+  variant: "horizontal",
 };
 
 export default memo(FuseShortcuts);

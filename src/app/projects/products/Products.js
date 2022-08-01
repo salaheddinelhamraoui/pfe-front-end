@@ -1,14 +1,10 @@
 import FusePageSimple from "@fuse/core/FusePageSimple";
-import FusePageCarded from "@fuse/core/FusePageCarded";
 import withReducer from "app/store/withReducer";
 import useThemeMediaQuery from "@fuse/hooks/useThemeMediaQuery";
 
-import { useDispatch } from "react-redux";
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useRef, useState } from "react";
 import { styled } from "@mui/material/styles";
 
-import ContactsSidebarContent from "./ContactsSidebarContent";
 import EditeModal from "../modal/EditeModal";
 
 import reducer from "../store";
@@ -23,13 +19,8 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 
 function Products() {
   const pageLayout = useRef(null);
-  const routeParams = useParams();
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
-
-  // useEffect(() => {
-  //   setRightSidebarOpen(Boolean(routeParams.id));
-  // }, [routeParams]);
 
   const handleSideBar = (state) => {
     setRightSidebarOpen(state);

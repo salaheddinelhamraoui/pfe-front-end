@@ -12,6 +12,10 @@ import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import IconButton from "@mui/material/IconButton";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
 import Autocomplete from "@mui/material/Autocomplete/Autocomplete";
 import Checkbox from "@mui/material/Checkbox/Checkbox";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -47,21 +51,9 @@ const EditeModal = ({ handleSideBar }) => {
 
   return (
     <>
-      <Box
-        className="relative w-full h-160 sm:h-192 px-32 sm:px-48"
-        sx={{
-          backgroundColor: "bg-black",
-        }}
-      >
-        <img
-          className="absolute inset-0 object-cover w-full h-full"
-          src="https://dev.co/wp-content/uploads/2021/01/Website-Development-Company.jpg"
-          alt="user background"
-        />
-      </Box>
       <IconButton
-        className="absolute top-0 right-0 my-16 mx-32 z-10"
-        sx={{ color: "white" }}
+        className="absolute top-0 right-0 my-16 mx-32 z-10  "
+        sx={{ color: "black" }}
         size="large"
         onClick={() => {
           handleSideBar(false);
@@ -70,65 +62,9 @@ const EditeModal = ({ handleSideBar }) => {
         <FuseSvgIcon>heroicons-outline:x</FuseSvgIcon>
       </IconButton>
 
-      <div className="relative flex flex-col flex-auto items-center px-24 sm:px-48">
-        <div className="w-full">
-          <div className="flex flex-auto items-end -mt-64">
-            <Controller
-              control={control}
-              name="avatar"
-              render={({ field: { onChange, value } }) => (
-                <Box
-                  sx={{
-                    borderWidth: 4,
-                    borderStyle: "solid",
-                    borderColor: "background.paper",
-                  }}
-                  className="relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-black bg-opacity-50 z-10" />
-                  <div className="absolute inset-0 flex items-center justify-center z-20">
-                    <div>
-                      <label
-                        htmlFor="button-avatar"
-                        className="flex p-8 cursor-pointer"
-                      >
-                        <input
-                          accept="image/*"
-                          className="hidden"
-                          id="button-avatar"
-                          type="file"
-                          onChange={() => {}}
-                        />
-                        <FuseSvgIcon className="text-white">
-                          heroicons-outline:camera
-                        </FuseSvgIcon>
-                      </label>
-                    </div>
-                    <div>
-                      <IconButton onClick={() => {}}>
-                        <FuseSvgIcon className="text-white">
-                          heroicons-solid:trash
-                        </FuseSvgIcon>
-                      </IconButton>
-                    </div>
-                  </div>
-                  <Avatar
-                    sx={{
-                      backgroundColor: "background.default",
-                      color: "text.secondary",
-                    }}
-                    className="object-cover w-full h-full text-64 font-bold"
-                    src="/assets/images/apps/ecommerce/fall-glow.jpg"
-                    alt="company logo"
-                  >
-                    Company Name
-                  </Avatar>
-                </Box>
-              )}
-            />
-          </div>
-        </div>
+      <div className="mt-32"></div>
 
+      <div className="relative flex flex-col flex-auto items-center px-24 sm:px-48">
         <Controller
           control={control}
           name="name"
@@ -156,20 +92,18 @@ const EditeModal = ({ handleSideBar }) => {
             />
           )}
         />
-
         <Controller
           control={control}
-          name="category"
+          name="Company"
           render={({ field }) => (
             <TextField
               className="mt-32"
               {...field}
-              label="Category"
-              placeholder="Category"
-              id="category"
-              error={!!errors.category}
-              helperText={errors?.category?.message}
+              label="Company"
+              placeholder="Company"
+              id="company"
               variant="outlined"
+              required
               fullWidth
               InputProps={{
                 startAdornment: (
@@ -183,26 +117,47 @@ const EditeModal = ({ handleSideBar }) => {
             />
           )}
         />
-
         <Controller
           control={control}
-          name="address"
+          name="freelancer"
           render={({ field }) => (
             <TextField
               className="mt-32"
               {...field}
-              label="Address"
-              placeholder="Address"
-              id="address"
-              error={!!errors.address}
-              helperText={errors?.address?.message}
+              label="Freelancer"
+              placeholder="Freelancer"
+              id="freelancer"
               variant="outlined"
+              required
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <FuseSvgIcon size={20}>heroicons-solid:code</FuseSvgIcon>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="state"
+          render={({ field }) => (
+            <TextField
+              className="mt-32"
+              {...field}
+              label="State"
+              placeholder="State"
+              id="state"
+              variant="outlined"
+              required
               fullWidth
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
                     <FuseSvgIcon size={20}>
-                      heroicons-solid:location-marker
+                      heroicons-solid:clipboard-check
                     </FuseSvgIcon>
                   </InputAdornment>
                 ),
@@ -210,6 +165,23 @@ const EditeModal = ({ handleSideBar }) => {
             />
           )}
         />
+        {/* <Controller
+          control={control}
+          name="name"
+          label="Email"
+          render={({ field }) => (
+            <Select
+              labelId="category-select-label"
+              id="category-select"
+              label="Category"
+              className="mt-32 w-full"
+            >
+              <MenuItem value="pending">Pending</MenuItem>
+              <MenuItem value="assigned">Assigned</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+            </Select>
+          )}
+        /> */}
       </div>
 
       <Box

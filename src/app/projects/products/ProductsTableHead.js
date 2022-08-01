@@ -19,13 +19,6 @@ import { removeProducts } from "../store/productsSlice";
 
 const rows = [
   {
-    id: "image",
-    align: "left",
-    disablePadding: true,
-    label: "",
-    sort: false,
-  },
-  {
     id: "name",
     align: "left",
     disablePadding: false,
@@ -33,26 +26,40 @@ const rows = [
     sort: true,
   },
   {
-    id: "categories",
+    id: "company",
     align: "left",
     disablePadding: false,
-    label: "Category",
+    label: "Company",
     sort: true,
   },
 
   {
-    id: "quantity",
-    align: "right",
+    id: "freelancer",
+    align: "left",
     disablePadding: false,
-    label: "Finished Projects",
+    label: "Freelancer",
     sort: true,
   },
 
   {
-    id: "active",
-    align: "right",
+    id: "state",
+    align: "left",
     disablePadding: false,
-    label: "Active",
+    label: "State",
+    sort: true,
+  },
+  {
+    id: "hours",
+    align: "left",
+    disablePadding: false,
+    label: "No. of Hours",
+    sort: true,
+  },
+  {
+    id: "startDate",
+    align: "left",
+    disablePadding: false,
+    label: "Start Date",
     sort: true,
   },
 ];

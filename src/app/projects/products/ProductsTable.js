@@ -180,35 +180,6 @@ function ProductsTable({ handleSideBar }) {
                       handleSideBar(true);
                     }}
                   >
-                    {/* <TableCell className="w-40 md:w-64 text-center" padding="none">
-                      <Checkbox
-                        checked={isSelected}
-                        onClick={(event) => event.stopPropagation()}
-                        onChange={(event) => handleCheck(event, n.id)}
-                      />
-                    </TableCell> */}
-
-                    <TableCell
-                      className="w-52 mx-8 px-8 "
-                      component="th"
-                      scope="row"
-                      padding="none"
-                    >
-                      {n.images.length > 0 && n.featuredImageId ? (
-                        <img
-                          className="w-full block rounded"
-                          src={_.find(n.images, { id: n.featuredImageId }).url}
-                          alt={n.name}
-                        />
-                      ) : (
-                        <img
-                          className="w-full block rounded"
-                          src="assets/images/apps/ecommerce/product-image-placeholder.png"
-                          alt={n.name}
-                        />
-                      )}
-                    </TableCell>
-
                     <TableCell
                       className="p-4 md:p-16"
                       component="th"
@@ -216,16 +187,65 @@ function ProductsTable({ handleSideBar }) {
                     >
                       {n.name}
                     </TableCell>
-
                     <TableCell
+                      className="p-4 md:p-16"
+                      component="th"
+                      scope="row"
+                    >
+                      {n.comapny}
+                    </TableCell>
+                    <TableCell
+                      className="p-4 md:p-16"
+                      component="th"
+                      scope="row"
+                    >
+                      <div
+                        className={clsx(
+                          "inline text-12 font-semibold py-4 px-12 rounded-full truncate bg-blue-500 text-white"
+                        )}
+                      >
+                        {n.Freelancer}
+                      </div>
+                    </TableCell>
+                    <TableCell
+                      className="p-4 md:p-16"
+                      component="th"
+                      scope="row"
+                    >
+                      {n.state}
+
+                      <i
+                        className={clsx(
+                          "inline-block w-8 h-8 rounded mx-8",
+                          n.state !== "Completed" && "bg-orange",
+                          n.state === "Completed" && "bg-green"
+                        )}
+                      />
+                    </TableCell>
+                    <TableCell
+                      className="p-4 md:p-16"
+                      component="th"
+                      scope="row"
+                    >
+                      {n.numberOfHours}
+                    </TableCell>
+                    <TableCell
+                      className="p-4 md:p-16"
+                      component="th"
+                      scope="row"
+                    >
+                      {n.startDate}
+                    </TableCell>
+
+                    {/* <TableCell
                       className="p-4 md:p-16 truncate"
                       component="th"
                       scope="row"
                     >
                       {n.categories.join(", ")}
-                    </TableCell>
+                    </TableCell> */}
 
-                    <TableCell
+                    {/* <TableCell
                       className="p-4 md:p-16"
                       component="th"
                       scope="row"
@@ -240,8 +260,8 @@ function ProductsTable({ handleSideBar }) {
                           n.quantity > 25 && "bg-green"
                         )}
                       />
-                    </TableCell>
-
+                    </TableCell> */}
+                    {/* 
                     <TableCell
                       className="p-4 md:p-16 "
                       component="th"
@@ -257,7 +277,7 @@ function ProductsTable({ handleSideBar }) {
                           heroicons-outline:minus-circle
                         </FuseSvgIcon>
                       )}
-                    </TableCell>
+                    </TableCell> */}
                   </TableRow>
                 );
               })}

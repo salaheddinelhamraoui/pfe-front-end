@@ -11,6 +11,7 @@ import ProjectDashboardAppConfig from "../main/project/ProjectDashboardAppConfig
 import FreelancerAppConfig from "../freelancers/FreelacerAppConfig";
 import CompaniesAppConfig from "../companies/CompaniesAppConfig";
 import ProjectsAppConfig from "../projects/ProjectsAppConfig";
+import ProfileAppConfig from "../profile/ProfileAppConfig";
 
 const routeConfigs = [
   ExampleConfig,
@@ -21,6 +22,7 @@ const routeConfigs = [
   FreelancerAppConfig,
   CompaniesAppConfig,
   ProjectsAppConfig,
+  ProfileAppConfig,
 ];
 
 const routes = [

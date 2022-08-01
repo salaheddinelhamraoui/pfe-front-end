@@ -9,10 +9,10 @@ const settingsConfig = {
   customScrollbars: true,
   direction: i18n.dir(i18n.options.lng) || "ltr", // rtl, ltr
   theme: {
-    main: themesConfig.light11,
-    navbar: themesConfig.dark1,
-    toolbar: themesConfig.dark1,
-    footer: themesConfig.light11,
+    main: themesConfig.legacy,
+    navbar: themesConfig.legacy,
+    toolbar: themesConfig.legacy,
+    footer: themesConfig.legacy,
   },
   /*
    To make whole app auth protected by default set defaultAuth:['admin','staff','user']
