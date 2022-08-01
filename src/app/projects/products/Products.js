@@ -1,16 +1,19 @@
+import FusePageSimple from "@fuse/core/FusePageSimple";
 import FusePageCarded from "@fuse/core/FusePageCarded";
 import withReducer from "app/store/withReducer";
 import useThemeMediaQuery from "@fuse/hooks/useThemeMediaQuery";
-import reducer from "../store";
-import ProductsHeader from "./ProductsHeader";
-import ProductsTable from "./ProductsTable";
+
 import { useDispatch } from "react-redux";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { styled } from "@mui/material/styles";
-import FusePageSimple from "@fuse/core/FusePageSimple";
+
 import ContactsSidebarContent from "./ContactsSidebarContent";
 import EditeModal from "../modal/EditeModal";
+
+import reducer from "../store";
+import ProductsHeader from "./ProductsHeader";
+import ProductsTable from "./ProductsTable";
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
   "& .FusePageSimple-header": {

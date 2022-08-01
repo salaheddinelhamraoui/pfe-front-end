@@ -9,7 +9,8 @@ import Error404Page from "../main/404/Error404Page";
 import ExampleConfig from "../main/example/ExampleConfig";
 import ProjectDashboardAppConfig from "../main/project/ProjectDashboardAppConfig";
 import FreelancerAppConfig from "../freelancers/FreelacerAppConfig";
-import ECommerceAppConfig from "../e-commerce/ECommerceAppConfig";
+import CompaniesAppConfig from "../companies/CompaniesAppConfig";
+import ProjectsAppConfig from "../projects/ProjectsAppConfig";
 
 const routeConfigs = [
   ExampleConfig,
@@ -18,7 +19,8 @@ const routeConfigs = [
   SignInConfig,
   SignUpConfig,
   FreelancerAppConfig,
-  ECommerceAppConfig,
+  CompaniesAppConfig,
+  ProjectsAppConfig,
 ];
 
 const routes = [
