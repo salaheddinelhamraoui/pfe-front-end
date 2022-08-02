@@ -8,10 +8,11 @@ import SignOutConfig from "../main/sign-out/SignOutConfig";
 import Error404Page from "../main/404/Error404Page";
 import ExampleConfig from "../main/example/ExampleConfig";
 import ProjectDashboardAppConfig from "../main/project/ProjectDashboardAppConfig";
-import FreelancerAppConfig from "../freelancers/FreelacerAppConfig";
-import CompaniesAppConfig from "../companies/CompaniesAppConfig";
-import ProjectsAppConfig from "../projects/ProjectsAppConfig";
-import ProfileAppConfig from "../profile/ProfileAppConfig";
+import FreelancerAppConfig from "../admin/freelancers/FreelacerAppConfig";
+import CompaniesAppConfig from "../admin/companies/CompaniesAppConfig";
+import ProjectsAppConfig from "../admin/projects/ProjectsAppConfig";
+import ProfileAppConfig from "../admin/profile/ProfileAppConfig";
+import { authRoles } from "../auth";
 
 const routeConfigs = [
   ExampleConfig,
@@ -25,15 +26,16 @@ const routeConfigs = [
   ProfileAppConfig,
 ];
 
+{
+  /* <Navigate to="/project" /> */
+}
+
 const routes = [
-  ...FuseUtils.generateRoutesFromConfigs(
-    routeConfigs,
-    settingsConfig.defaultAuth
-  ),
+  ...FuseUtils.generateRoutesFromConfigs(routeConfigs, authRoles.admin),
   {
     path: "/",
-    element: <Navigate to="/project" />,
-    auth: settingsConfig.defaultAuth,
+    element: <Error404Page />,
+    auth: authRoles.freelancer,
     settings: {
       layout: {
         style: "layout2",

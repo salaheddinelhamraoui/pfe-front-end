@@ -1,6 +1,5 @@
 import { lazy } from "react";
-import { Navigate } from "react-router-dom";
-import EditeModal from "./modal/EditeModal";
+import { authRoles } from "../../auth";
 
 const Products = lazy(() => import("./products/Products"));
 
@@ -8,6 +7,7 @@ const ProjectsAppConfig = {
   settings: {
     layout: { style: "layout2" },
   },
+  auth: authRoles.admin,
   routes: [
     {
       path: "projects",

@@ -2,6 +2,7 @@ import i18next from "i18next";
 import ar from "./navigation-i18n/ar";
 import en from "./navigation-i18n/en";
 import tr from "./navigation-i18n/tr";
+import { authRoles } from "../auth";
 
 i18next.addResourceBundle("en", "navigation", en);
 i18next.addResourceBundle("tr", "navigation", tr);
@@ -30,6 +31,7 @@ const navigationConfig = [
     title: "Analytics",
     type: "item",
     icon: "heroicons-outline:clipboard-check",
+    auth: authRoles.admin,
     url: "/project",
   },
   {
@@ -37,6 +39,7 @@ const navigationConfig = [
     title: "Freelancers",
     type: "item",
     icon: "heroicons-outline:user-circle",
+    auth: authRoles.admin,
     url: "/freelancers",
   },
   {
@@ -44,6 +47,7 @@ const navigationConfig = [
     title: "Companies",
     type: "item",
     icon: "heroicons-outline:office-building",
+    auth: authRoles.admin,
     url: "/companies",
   },
   {
@@ -51,6 +55,7 @@ const navigationConfig = [
     title: "Projects",
     type: "item",
     icon: "heroicons-outline:terminal",
+    auth: authRoles.admin,
     url: "/projects",
   },
 ];
