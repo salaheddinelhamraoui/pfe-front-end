@@ -13,6 +13,7 @@ import CompaniesAppConfig from "../admin/companies/CompaniesAppConfig";
 import ProjectsAppConfig from "../admin/projects/ProjectsAppConfig";
 import ProfileAppConfig from "../admin/profile/ProfileAppConfig";
 import { authRoles } from "../auth";
+import Home from "../main/home/Home";
 
 const routeConfigs = [
   ExampleConfig,
@@ -26,16 +27,11 @@ const routeConfigs = [
   ProfileAppConfig,
 ];
 
-{
-  /* <Navigate to="/project" /> */
-}
-
 const routes = [
   ...FuseUtils.generateRoutesFromConfigs(routeConfigs, authRoles.admin),
   {
     path: "/",
-    element: <Error404Page />,
-    auth: authRoles.freelancer,
+    element: <Home />,
     settings: {
       layout: {
         style: "layout2",
@@ -56,6 +52,7 @@ const routes = [
   {
     path: "404",
     element: <Error404Page />,
+    auth: authRoles.all,
     settings: {
       layout: {
         style: "layout2",

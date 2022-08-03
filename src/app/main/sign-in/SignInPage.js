@@ -11,6 +11,8 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
+import AlertTitle from "@mui/material/AlertTitle";
+import Alert from "@mui/material/Alert";
 
 import _ from "@lodash";
 
@@ -51,7 +53,7 @@ function SignInPage() {
   const { isValid, dirtyFields, errors } = formState;
 
   useEffect(() => {
-    setValue("email", "admin@workflow.com", {
+    setValue("email", "admin@admin.com", {
       shouldDirty: true,
       shouldValidate: true,
     });
@@ -80,11 +82,26 @@ function SignInPage() {
         <div className="w-full max-w-320 sm:w-320 mx-auto sm:mx-0">
           <img className="w-48" src="assets/images/logo/logo.svg" alt="logo" />
 
-          <Typography className="mt-32 text-4xl font-extrabold tracking-tight leading-tight">
-            Sign in
+          <Typography className="mt-32  text-4xl font-extrabold tracking-tight leading-tight">
+            Sign In
           </Typography>
-          <div className="flex items-baseline mt-2 font-medium"></div>
-
+          <Alert severity="info" className="mt-16">
+            <AlertTitle>Admin Account</AlertTitle>
+            <strong>Email: </strong> admin@admin.com <br />
+            <strong>Password: </strong> admin
+          </Alert>
+          <Alert severity="info" className="mt-16">
+            <AlertTitle>Freelancer Account</AlertTitle>
+            <strong>Email: </strong> freelancer@freelancer.com
+            <br />
+            <strong>Password: </strong> freelancer
+          </Alert>
+          <Alert severity="info" className="mt-16">
+            <AlertTitle>Company Account</AlertTitle>
+            <strong>Email: </strong> company@company.com
+            <br />
+            <strong>Password: </strong> company
+          </Alert>
           <form
             name="loginForm"
             noValidate
