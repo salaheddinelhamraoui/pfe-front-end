@@ -1,0 +1,17 @@
+[
+    {
+        "id": "0",
+        "title": "Project 1",
+        "color": "#419388"
+    },
+    {
+        "id": "1",
+        "title": "Project 2",
+        "color": "#4151B0"
+    },
+    {
+        "id": "2",
+        "title": "Project 3",
+        "color": "#D63E63"
+    }
+]

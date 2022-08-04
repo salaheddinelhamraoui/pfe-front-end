@@ -80,7 +80,7 @@ function SignInPage() {
     <div className="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-1 min-w-0">
       <Paper className="h-full sm:h-auto md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-16 sm:p-48 md:p-64 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none ltr:border-r-1 rtl:border-l-1">
         <div className="w-full max-w-320 sm:w-320 mx-auto sm:mx-0">
-          <img className="w-48" src="assets/images/logo/logo.svg" alt="logo" />
+          <img className="w-48" src="assets/images/logo/logo.png" alt="logo" />
 
           <Typography className="mt-32  text-4xl font-extrabold tracking-tight leading-tight">
             Sign In
@@ -96,8 +96,8 @@ function SignInPage() {
             <br />
             <strong>Password: </strong> freelancer
           </Alert>
-          <Alert severity="info" className="mt-16">
-            <AlertTitle>Company Account</AlertTitle>
+          <Alert severity="warning" className="mt-16">
+            <AlertTitle>Company Account / coming soon</AlertTitle>
             <strong>Email: </strong> company@company.com
             <br />
             <strong>Password: </strong> company
@@ -215,12 +215,12 @@ function SignInPage() {
         <div className="z-10 relative w-full max-w-2xl">
           <div className="text-7xl font-bold leading-none text-gray-100">
             <div>Welcome to</div>
-            <div>our community</div>
+            <div>WorkFlow App</div>
           </div>
           <div className="mt-24 text-lg tracking-tight leading-6 text-gray-400">
-            Fuse helps developers to build organized and well coded dashboards
-            full of beautiful and rich modules. Join us and start building your
-            application today.
+            Contrary to popular belief, Lorem Ipsum is not simply random text.
+            It has roots in a piece of classical Latin literature from 45 BC,
+            making it over 2000 years old.
           </div>
         </div>
       </Box>

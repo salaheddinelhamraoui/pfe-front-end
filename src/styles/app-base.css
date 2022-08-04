@@ -1,4 +1,3 @@
-
 /*@tailwind base;*/
 
 /**
@@ -16,7 +15,7 @@
 }
 
 * :focus {
-     outline: none !important;
+    outline: none !important;
 }
 
 html {
@@ -78,8 +77,8 @@ h6, .h6 {
     font-size: 12px;
 }
 
-.ps > .ps__rail-y,
-.ps > .ps__rail-x {
+.ps>.ps__rail-y,
+.ps>.ps__rail-x {
     z-index: 99;
 }
 
@@ -92,7 +91,7 @@ a[role=button] {
 }
 
 .MuiModal-root {
-    z-index: 9999;
+    z-index: 99;
 }
 
 /* Medium Devices, Desktops Only */
@@ -138,8 +137,7 @@ button:focus {
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
-input:-webkit-autofill:active
-{
+input:-webkit-autofill:active {
     transitionDelay: 9999s;
     transitionProperty: background-color, color;
 }
