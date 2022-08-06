@@ -6,6 +6,7 @@ import mock from "./mock";
 import "./api/academy-api";
 import "./api/ecommerce-api";
 import "./api/calendar-api";
+import "./api/file-manager-api";
 
 mock.onAny().passThrough();
 

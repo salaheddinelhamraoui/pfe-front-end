@@ -96,8 +96,8 @@ function SignInPage() {
             <br />
             <strong>Password: </strong> freelancer
           </Alert>
-          <Alert severity="warning" className="mt-16">
-            <AlertTitle>Company Account / coming soon</AlertTitle>
+          <Alert severity="info" className="mt-16">
+            <AlertTitle>Company Account</AlertTitle>
             <strong>Email: </strong> company@company.com
             <br />
             <strong>Password: </strong> company

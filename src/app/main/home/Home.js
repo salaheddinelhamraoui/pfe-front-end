@@ -16,7 +16,7 @@ const Home = () => {
   }
 
   if (user && user.role === "company") {
-    return <Navigate to="/home2" />;
+    return <Navigate to="/home-company" />;
   }
 
   return <FuseLoading />;

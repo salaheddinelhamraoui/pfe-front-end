@@ -16,6 +16,8 @@ import useThemeMediaQuery from "@fuse/hooks/useThemeMediaQuery";
 import { selectCategories } from "../store/categoriesSlice";
 import { getCourses, selectCourses } from "../store/coursesSlice";
 import FreelancerCard from "./FreelancerCard";
+import Button from "@mui/material/Button";
+import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
 
 function Freelancers(props) {
   const dispatch = useDispatch();
@@ -71,8 +73,8 @@ function Freelancers(props) {
   return (
     <FusePageSimple
       content={
-        <div className="flex flex-col flex-1 w-full mx-auto px-24 pt-24 sm:p-40">
-          <div className="flex flex-col shrink-0 sm:flex-row items-center justify-between space-y-16 sm:space-y-0">
+        <div className="w-full flex flex-col flex-1  mx-auto px-24 pt-24 sm:p-40">
+          <div className="w-full flex flex-col shrink-0 sm:flex-row items-center justify-between space-y-16 sm:space-y-0">
             <div className="flex flex-col sm:flex-row w-full sm:w-auto items-center space-y-16 sm:space-y-0 sm:space-x-16">
               <FormControl className="flex w-full sm:w-136" variant="outlined">
                 <InputLabel id="category-select-label">Category</InputLabel>
@@ -107,6 +109,24 @@ function Freelancers(props) {
                   shrink: true,
                 }}
               />
+              <div className="ml-auto">
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
+                >
+                  <Button
+                    className=""
+                    variant="contained"
+                    color="secondary"
+                    startIcon={
+                      <FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>
+                    }
+                    onClick={() => {}}
+                  >
+                    Add
+                  </Button>
+                </motion.div>
+              </div>
             </div>
           </div>
           {useMemo(() => {

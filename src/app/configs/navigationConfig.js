@@ -90,6 +90,38 @@ const navigationConfig = [
     auth: authRoles.freelancer,
     url: "/documents",
   },
+  {
+    id: "home-company",
+    title: "Home",
+    type: "item",
+    icon: "heroicons-outline:home",
+    auth: authRoles.company,
+    url: "/home-company",
+  },
+  {
+    id: "calendar-company",
+    title: "Calendar",
+    type: "item",
+    icon: "heroicons-outline:calendar",
+    auth: authRoles.company,
+    url: "/calendar-company",
+  },
+  {
+    id: "freelancers-company",
+    title: "Freelacers",
+    type: "item",
+    icon: "heroicons-outline:user-group",
+    auth: authRoles.company,
+    url: "/freelancers-company",
+  },
+  {
+    id: "documents-company",
+    title: "Documents",
+    type: "item",
+    icon: "heroicons-outline:folder-open",
+    auth: authRoles.company,
+    url: "/documents-company",
+  },
 ];
 
 export default navigationConfig;

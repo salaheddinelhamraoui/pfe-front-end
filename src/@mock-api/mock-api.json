@@ -31627,12 +31627,12 @@
           {
             "uuid": "XgbuVEXBU6gtSKdbTYR1Zbbby1i3",
             "from": "custom-db",
-            "password": "staff",
-            "role": "staff",
+            "password": "company",
+            "role": "company",
             "data": {
               "displayName": "Arnold Matlock",
               "photoURL": "assets/images/avatars/Arnold.jpg",
-              "email": "staff@fusetheme.com",
+              "email": "company@company.com",
               "settings": {
                 "layout": {
                   "style": "layout2",
