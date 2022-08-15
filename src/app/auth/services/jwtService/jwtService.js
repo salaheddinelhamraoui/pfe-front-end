@@ -1,7 +1,9 @@
 import FuseUtils from '@fuse/utils/FuseUtils';
 import axios from 'axios';
 import jwtDecode from 'jwt-decode';
+import { log } from 'util';
 import jwtServiceConfig from './jwtServiceConfig';
+import { showMessage } from 'app/store/fuse/messageSlice';
 
 /* eslint-disable camelcase */
 
@@ -18,7 +20,11 @@ class JwtService extends FuseUtils.EventEmitter {
       },
       (err) => {
         return new Promise((resolve, reject) => {
-          if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
+          if (
+            err.response.status === 401 &&
+            err.config &&
+            !err.config.__isRetryRequest
+          ) {
             // if you ever get an unauthorized response, logout the user
             this.emit('onAutoLogout', 'Invalid access_token');
             this.setSession(null);
@@ -34,7 +40,6 @@ class JwtService extends FuseUtils.EventEmitter {
 
     if (!access_token) {
       this.emit('onNoAccessToken');
-
       return;
     }
 
@@ -61,14 +66,12 @@ class JwtService extends FuseUtils.EventEmitter {
     });
   };
 
-  signInWithEmailAndPassword = (email, password) => {
+  signInWithEmailAndPassword = (email, password, dispatch) => {
     return new Promise((resolve, reject) => {
       axios
-        .get(jwtServiceConfig.signIn, {
-          data: {
-            email,
-            password,
-          },
+        .post(jwtServiceConfig.signIn, {
+          email,
+          password,
         })
         .then((response) => {
           if (response.data.user) {
@@ -78,6 +81,10 @@ class JwtService extends FuseUtils.EventEmitter {
           } else {
             reject(response.data.error);
           }
+        })
+        .catch((res) => {
+          console.log(res.response.data.message);
+          dispatch(showMessage({ message: res.response.data.message }));
         });
     });
   };
