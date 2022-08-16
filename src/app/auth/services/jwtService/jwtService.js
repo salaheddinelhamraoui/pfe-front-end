@@ -69,7 +69,7 @@ class JwtService extends FuseUtils.EventEmitter {
   signInWithEmailAndPassword = (email, password, dispatch) => {
     return new Promise((resolve, reject) => {
       axios
-        .post(jwtServiceConfig.signIn, {
+        .post(process.env.REACT_APP_API_URL + jwtServiceConfig.signIn, {
           email,
           password,
         })
@@ -90,13 +90,19 @@ class JwtService extends FuseUtils.EventEmitter {
   };
 
   signInWithToken = () => {
+    const config = {
+      headers: { Authorization: `Bearer ${this.getAccessToken()}` },
+    };
+
     return new Promise((resolve, reject) => {
       axios
-        .get(jwtServiceConfig.accessToken, {
-          data: {
-            access_token: this.getAccessToken(),
+        .post(
+          process.env.REACT_APP_API_URL + jwtServiceConfig.accessToken,
+          {
+            token: this.getAccessToken(),
           },
-        })
+          config
+        )
         .then((response) => {
           if (response.data.user) {
             this.setSession(response.data.access_token);
