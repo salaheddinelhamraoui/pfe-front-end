@@ -5,21 +5,21 @@ import clsx from 'clsx';
 import FreelancerCategory from './FreelancerCategory';
 import Avatar from '@mui/material/Avatar';
 
-function FreelancerInfo({ course, className }) {
-  if (!course) {
+function FreelancerInfo({ freelancer, className }) {
+  if (!freelancer) {
     return null;
   }
 
   return (
     <div className={clsx('w-full', className)}>
       <div className='flex items-center justify-between mb-16'>
-        <FreelancerCategory title={course.category} />
+        <FreelancerCategory
+          title={freelancer.category && freelancer.category}
+        />
 
-        {course.progress.completed > 0 && (
-          <FuseSvgIcon className='text-green-600' size={20}>
-            heroicons-solid:badge-check
-          </FuseSvgIcon>
-        )}
+        <FuseSvgIcon className='text-green-600' size={20}>
+          heroicons-solid:badge-check
+        </FuseSvgIcon>
       </div>
       <div className='flex items-center justify-center mb-24'>
         <Avatar
@@ -33,7 +33,9 @@ function FreelancerInfo({ course, className }) {
         ></Avatar>
       </div>
 
-      <Typography className='text-16 font-medium'>{course.title}</Typography>
+      <Typography className='text-16 font-medium'>
+        {freelancer.data.displayName}
+      </Typography>
 
       {/* <Typography className="text-13 mt-2 line-clamp-2" color="text.secondary">
         {course.description}
@@ -48,23 +50,8 @@ function FreelancerInfo({ course, className }) {
         <FuseSvgIcon color='disabled' size={20}>
           heroicons-solid:clock
         </FuseSvgIcon>
-        <span className='whitespace-nowrap leading-none'>{`${course.duration} Finished Projects`}</span>
+        <span className='whitespace-nowrap leading-none'>{`5 Finished Projects`}</span>
       </Typography>
-      {/* <Typography
-        className="flex items-center space-x-6 text-13 mt-8"
-        color="text.secondary"
-      >
-        <FuseSvgIcon color="disabled" size={20}>
-          heroicons-solid:academic-cap
-        </FuseSvgIcon>
-        <span className="whitespace-nowrap leading-none">
-          {course.progress.completed === 1 && "Completed once"}
-          {course.progress.completed === 2 && "Completed twice"}
-          {course.progress.completed > 2 &&
-            `Completed ${course.progress.completed} times`}
-          {course.progress.completed <= 0 && "Never completed"}
-        </span>
-      </Typography> */}
     </div>
   );
 }

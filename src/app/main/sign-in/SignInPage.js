@@ -38,12 +38,6 @@ const schema = yup.object().shape({
     .min(4, 'Password is too short - must be at least 4 chars.'),
 });
 
-const defaultValues = {
-  email: '',
-  password: '',
-  remember: true,
-};
-
 function SignInPage() {
   const { control, formState, handleSubmit, setError, setValue } = useForm({
     mode: 'onChange',

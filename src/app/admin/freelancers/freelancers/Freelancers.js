@@ -1,5 +1,5 @@
 import _ from '@lodash';
-
+import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { motion } from 'framer-motion';
@@ -11,58 +11,52 @@ import FreelancerCard from './FreelancerCard';
 import Button from '@mui/material/Button';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import EditeModal from '../modal/EditeModal';
+import FuseLoading from '@fuse/core/FuseLoading';
+import { log } from 'util';
 
 function Freelancers(props) {
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   // const theme = useTheme();
-  const [filteredData, setFilteredData] = useState(null);
+  const [filteredData, setFilteredData] = useState('');
   const [searchText, setSearchText] = useState('');
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
+  const [freelancers, setFreelancers] = useState([]);
+  const [loadingState, setLoadingState] = useState(true);
+  const [freelancer, setFreelancer] = useState(null);
+  const [update, setUpdate] = useState(false);
 
   const handleSideBar = (state) => {
     setRightSidebarOpen(state);
   };
 
-  const data = [
-    {
-      'id': '694e4e5f-f25f-470b-bd0e-26b1d4f64028',
-      'title': 'Khalid Adel',
-      'slug': 'khalid-adel',
-      'description': 'Introductory course for Angular and framework basics',
-      'category': 'front-end-developer',
-      'duration': 3,
-      'totalSteps': 11,
-      'updatedAt': 'Jun 28, 2021',
-      'progress': { 'currentStep': 3, 'completed': 2 },
-    },
-    {
-      'id': '694e4e5f-f25f-470b-bd0e-26b1d4f6402e',
-      'title': 'Khalid Adel',
-      'slug': 'khalid-adel',
-      'description': 'Introductory course for Angular and framework basics',
-      'category': 'front-end-developer',
-      'duration': 3,
-      'totalSteps': 11,
-      'updatedAt': 'Jun 28, 2021',
-      'progress': { 'currentStep': 3, 'completed': 2 },
-    },
-    {
-      'id': '694e4e5f-f25f-470b-bd0e-26b1d4f6402d',
-      'title': 'Khalid Adel',
-      'slug': 'khalid-adel',
-      'description': 'Introductory course for Angular and framework basics',
-      'category': 'front-end-developer',
-      'duration': 3,
-      'totalSteps': 11,
-      'updatedAt': 'Jun 28, 2021',
-      'progress': { 'currentStep': 3, 'completed': 2 },
-    },
-  ];
+  const handleSelectedUser = (state) => {
+    setFreelancer(state);
+  };
+
+  useEffect(() => {
+    axios
+      .get(process.env.REACT_APP_API_URL + '/findAllUsers?role=freelancer')
+      .then((response) => {
+        setFreelancers(response.data.result);
+        setLoadingState(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoadingState(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (freelancers.length > 0) {
+      setRightSidebarOpen(true);
+    }
+  }, [freelancer]);
 
   function handleSearchText(event) {
     setSearchText(event.target.value);
   }
+
   return (
     <FusePageSimple
       content={
@@ -105,6 +99,7 @@ function Freelancers(props) {
               </div>
             </div>
           </div>
+          {loadingState && <FuseLoading />}
           {useMemo(() => {
             const container = {
               show: {
@@ -125,17 +120,20 @@ function Freelancers(props) {
               },
             };
 
-            return data.length > 0 ? (
+            return freelancers.length > 0 ? (
               <motion.div
                 className='flex grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-32 mt-32 sm:mt-40'
                 variants={container}
                 initial='hidden'
                 animate='show'
               >
-                {data.map((freelancer) => {
+                {freelancers.map((freelancer) => {
                   return (
-                    <motion.div variants={item} key={freelancer.id}>
-                      <FreelancerCard freelancer={freelancer} />
+                    <motion.div variants={item} key={freelancer._id}>
+                      <FreelancerCard
+                        freelancer={freelancer}
+                        handleSelectedUser={handleSelectedUser}
+                      />
                     </motion.div>
                   );
                 })}
@@ -143,14 +141,16 @@ function Freelancers(props) {
             ) : (
               <div className='flex flex-1 items-center justify-center'>
                 <Typography color='text.secondary' className='text-24 my-24'>
-                  No courses found!
+                  No freelancers found!
                 </Typography>
               </div>
             );
-          }, [data])}
+          }, [freelancers])}
         </div>
       }
-      rightSidebarContent={<EditeModal handleSideBar={handleSideBar} />}
+      rightSidebarContent={
+        <EditeModal handleSideBar={handleSideBar} freelancer={freelancer} />
+      }
       rightSidebarOpen={rightSidebarOpen}
       rightSidebarOnClose={() => setRightSidebarOpen(false)}
       rightSidebarWidth={440}
