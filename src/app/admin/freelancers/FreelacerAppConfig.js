@@ -1,23 +1,22 @@
-import { lazy } from "react";
-import { Navigate } from "react-router-dom";
-import FreelancerApp from "./FreelancerApp";
+import { lazy } from 'react';
+import FreelancerApp from './FreelancerApp';
 
-const Course = lazy(() => import("./freelancer/Freelancer"));
-const Freelancers = lazy(() => import("./freelancers/Freelancers"));
+const Course = lazy(() => import('./freelancer/Freelancer'));
+const Freelancers = lazy(() => import('./freelancers/Freelancers'));
 
 const FreelancerAppConfig = {
   settings: {
     layout: {
-      style: "layout2",
+      style: 'layout2',
     },
   },
   routes: [
     {
-      path: "freelancers",
+      path: 'freelancers',
       element: <FreelancerApp />,
       children: [
         {
-          path: "",
+          path: '',
           element: <Freelancers />,
         },
       ],
