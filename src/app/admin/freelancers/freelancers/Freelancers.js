@@ -1,4 +1,3 @@
-import _ from '@lodash';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -7,12 +6,11 @@ import { useEffect, useMemo, useState } from 'react';
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 
-import FreelancerCard from './FreelancerCard';
 import Button from '@mui/material/Button';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import EditeModal from '../modal/EditeModal';
 import FuseLoading from '@fuse/core/FuseLoading';
-import { log } from 'util';
+import EditeModal from '../modal/EditeModal';
+import FreelancerCard from './FreelancerCard';
 
 function Freelancers(props) {
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
@@ -36,7 +34,7 @@ function Freelancers(props) {
 
   useEffect(() => {
     axios
-      .get(process.env.REACT_APP_API_URL + '/findAllUsers?role=freelancer')
+      .get(`${process.env.REACT_APP_API_URL}/findAllUsers?role=freelancer&page=1&limit=3`)
       .then((response) => {
         setFreelancers(response.data.result);
         setLoadingState(false);
@@ -60,35 +58,33 @@ function Freelancers(props) {
   return (
     <FusePageSimple
       content={
-        <div className='w-full flex flex-col flex-1  mx-auto px-24 pt-24 sm:p-40'>
-          <div className='w-full flex flex-col shrink-0 sm:flex-row items-center justify-between space-y-16 sm:space-y-0'>
-            <div className='flex flex-col sm:flex-row w-full sm:w-auto items-center space-y-16 sm:space-y-0 sm:space-x-16'>
+        <div className="w-full flex flex-col flex-1  mx-auto px-24 pt-24 sm:p-40">
+          <div className="w-full flex flex-col shrink-0 sm:flex-row items-center justify-between space-y-16 sm:space-y-0">
+            <div className="flex flex-col sm:flex-row w-full sm:w-auto items-center space-y-16 sm:space-y-0 sm:space-x-16">
               <TextField
-                label='Search for a freelancer'
-                placeholder='Enter a keyword...'
-                className='flex w-full sm:w-256 mx-8'
+                label="Search for a freelancer"
+                placeholder="Enter a keyword..."
+                className="flex w-full sm:w-256 mx-8"
                 value={searchText}
                 inputProps={{
                   'aria-label': 'Search',
                 }}
                 onChange={handleSearchText}
-                variant='outlined'
+                variant="outlined"
                 InputLabelProps={{
                   shrink: true,
                 }}
               />
-              <div className='ml-auto'>
+              <div className="ml-auto">
                 <motion.div
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0, transition: { delay: 0.2 } }}
                 >
                   <Button
-                    className=''
-                    variant='contained'
-                    color='secondary'
-                    startIcon={
-                      <FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>
-                    }
+                    className=""
+                    variant="contained"
+                    color="secondary"
+                    startIcon={<FuseSvgIcon>heroicons-outline:plus</FuseSvgIcon>}
                     onClick={() => {
                       setRightSidebarOpen(true);
                     }}
@@ -122,10 +118,10 @@ function Freelancers(props) {
 
             return freelancers.length > 0 ? (
               <motion.div
-                className='flex grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-32 mt-32 sm:mt-40'
+                className="flex grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-32 mt-32 sm:mt-40"
                 variants={container}
-                initial='hidden'
-                animate='show'
+                initial="hidden"
+                animate="show"
               >
                 {freelancers.map((freelancer) => {
                   return (
@@ -139,8 +135,8 @@ function Freelancers(props) {
                 })}
               </motion.div>
             ) : (
-              <div className='flex flex-1 items-center justify-center'>
-                <Typography color='text.secondary' className='text-24 my-24'>
+              <div className="flex flex-1 items-center justify-center">
+                <Typography color="text.secondary" className="text-24 my-24">
                   No freelancers found!
                 </Typography>
               </div>
@@ -148,9 +144,7 @@ function Freelancers(props) {
           }, [freelancers])}
         </div>
       }
-      rightSidebarContent={
-        <EditeModal handleSideBar={handleSideBar} freelancer={freelancer} />
-      }
+      rightSidebarContent={<EditeModal handleSideBar={handleSideBar} freelancer={freelancer} />}
       rightSidebarOpen={rightSidebarOpen}
       rightSidebarOnClose={() => setRightSidebarOpen(false)}
       rightSidebarWidth={440}
