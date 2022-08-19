@@ -7,9 +7,11 @@ import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { lighten } from '@mui/material/styles';
 import FreelancerInfo from '../FreelancerInfo';
 
-function FreelancerCard({ freelancer, handleSelectedUser }) {
+function FreelancerCard({ freelancer, handleSelectedUser, handleSideBar }) {
   const handleOnClick = () => {
     handleSelectedUser(freelancer);
+    handleSideBar(true);
+    window.scrollTo(0, 0);
   };
   return (
     <Card className='flex flex-col h-384 shadow'>

@@ -21,7 +21,10 @@ import axios from 'axios';
  */
 const schema = yup.object().shape({
   name: yup.string().required('You must enter a name'),
-  email: yup.string().email('You must enter a valid email').required('You must enter a email'),
+  email: yup
+    .string()
+    .email('You must enter a valid email')
+    .required('You must enter a email'),
   password: yup
     .string()
     .required('Please enter your password.')
@@ -36,7 +39,15 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
   const routeParams = useParams();
   const dispatch = useDispatch();
 
-  const { control, watch, reset, handleSubmit, formState, getValues, setValue } = useForm({
+  const {
+    control,
+    watch,
+    reset,
+    handleSubmit,
+    formState,
+    getValues,
+    setValue,
+  } = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
@@ -78,7 +89,7 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
     };
   };
 
-  function onSubmit({ name, email, password, category }) {
+  const onSubmit = ({ name, email, password, category }) => {
     setLoadingState(true);
 
     if (selectedFile) {
@@ -102,6 +113,7 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
             dispatch(showMessage({ message: 'Freelancer Added successfully' }));
             setLoadingState(false);
             handleSideBar(false);
+            getFreelancers({ init: true });
             reset({
               name: '',
               email: '',
@@ -137,6 +149,7 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
           dispatch(showMessage({ message: 'Freelancer Added successfully' }));
           setLoadingState(false);
           handleSideBar(false);
+          getFreelancers({ init: true });
           reset({
             name: '',
             email: '',
@@ -151,7 +164,25 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
           setLoadingState(false);
         });
     }
-  }
+  };
+
+  const handleFreelancerDelete = (freelancerId) => {
+    if (freelancerId) {
+      setLoadingState(true);
+      // delete freelancer
+      axios
+        .delete(`${process.env.REACT_APP_API_URL}/deleteUser/${freelancerId}`)
+        .then(() => {
+          dispatch(showMessage({ message: 'Freelancer Deleted Successfully' }));
+          setLoadingState(false);
+          handleSideBar(false);
+        })
+        .catch((err) => {
+          dispatch(showMessage({ message: err.response.data.message }));
+          setLoadingState(false);
+        });
+    }
+  };
 
   if (loadingState) {
     return <FuseLoading />;
@@ -160,9 +191,9 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
   return (
     <>
       <IconButton
-        className="absolute top-0 right-0 my-16 mx-32 z-10  "
+        className='absolute top-0 right-0 my-16 mx-32 z-10  '
         sx={{ color: 'black' }}
-        size="large"
+        size='large'
         onClick={() => {
           handleSideBar(false);
         }}
@@ -170,19 +201,19 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
         <FuseSvgIcon>heroicons-outline:x</FuseSvgIcon>
       </IconButton>
 
-      <div className="mt-32">
+      <div className='mt-32'>
         <p> </p>
       </div>
       <form
-        name="addFreelancerForm"
+        name='addFreelancerForm'
         noValidate
-        className="flex flex-col justify-center w-full mt-32"
+        className='flex flex-col justify-center w-full mt-32'
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className="flex mx-auto">
+        <div className='flex mx-auto'>
           <Controller
             control={control}
-            name="avatar"
+            name='avatar'
             render={({ field: { onChange, value } }) => (
               <Box
                 sx={{
@@ -190,20 +221,25 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
                   borderStyle: 'solid',
                   borderColor: 'background.paper',
                 }}
-                className="relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden"
+                className='relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden'
               >
-                <div className="absolute inset-0 bg-black bg-opacity-50 z-10" />
-                <div className="absolute inset-0 flex items-center justify-center z-20">
+                <div className='absolute inset-0 bg-black bg-opacity-50 z-10' />
+                <div className='absolute inset-0 flex items-center justify-center z-20'>
                   <div>
-                    <label htmlFor="button-avatar" className="flex p-8 cursor-pointer">
+                    <label
+                      htmlFor='button-avatar'
+                      className='flex p-8 cursor-pointer'
+                    >
                       <input
-                        accept="image/*"
-                        className="hidden"
-                        id="button-avatar"
-                        type="file"
+                        accept='image/*'
+                        className='hidden'
+                        id='button-avatar'
+                        type='file'
                         onChange={handleFileInputChange}
                       />
-                      <FuseSvgIcon className="text-white">heroicons-outline:camera</FuseSvgIcon>
+                      <FuseSvgIcon className='text-white'>
+                        heroicons-outline:camera
+                      </FuseSvgIcon>
                     </label>
                   </div>
                   <div>
@@ -214,7 +250,9 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
                         setPreviewSource('');
                       }}
                     >
-                      <FuseSvgIcon className="text-white">heroicons-solid:trash</FuseSvgIcon>
+                      <FuseSvgIcon className='text-white'>
+                        heroicons-solid:trash
+                      </FuseSvgIcon>
                     </IconButton>
                   </div>
                 </div>
@@ -223,12 +261,12 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
                     backgroundColor: 'background.default',
                     color: 'text.secondary',
                   }}
-                  className="object-cover w-full h-full text-64 font-bold"
+                  className='object-cover w-full h-full text-64 font-bold'
                   src={
                     previewSource ||
                     'https://monstar-lab.com/global/wp-content/uploads/sites/11/2019/04/male-placeholder-image.jpeg'
                   }
-                  alt="company logo"
+                  alt='company logo'
                 >
                   Freelancer Name
                 </Avatar>
@@ -236,26 +274,28 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
             )}
           />
         </div>
-        <div className="relative flex flex-col flex-auto items-center px-24 sm:px-48">
+        <div className='relative flex flex-col flex-auto items-center px-24 sm:px-48'>
           <Controller
             control={control}
-            name="name"
+            name='name'
             render={({ field }) => (
               <TextField
-                className="mt-32"
+                className='mt-32'
                 {...field}
-                label="Name"
-                placeholder="Name"
-                id="name"
+                label='Name'
+                placeholder='Name'
+                id='name'
                 error={!!errors.name}
                 helperText={errors?.name?.message}
-                variant="outlined"
+                variant='outlined'
                 required
                 fullWidth
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">
-                      <FuseSvgIcon size={20}>heroicons-solid:user-circle</FuseSvgIcon>
+                    <InputAdornment position='start'>
+                      <FuseSvgIcon size={20}>
+                        heroicons-solid:user-circle
+                      </FuseSvgIcon>
                     </InputAdornment>
                   ),
                 }}
@@ -264,23 +304,25 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
           />
           <Controller
             control={control}
-            name="email"
+            name='email'
             render={({ field }) => (
               <TextField
-                className="mt-32"
+                className='mt-32'
                 {...field}
-                label="Email"
-                placeholder="email"
-                id="email"
-                variant="outlined"
+                label='Email'
+                placeholder='email'
+                id='email'
+                variant='outlined'
                 required
                 fullWidth
                 error={!!errors.email}
                 helperText={errors?.email?.message}
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">
-                      <FuseSvgIcon size={20}>heroicons-solid:at-symbol</FuseSvgIcon>
+                    <InputAdornment position='start'>
+                      <FuseSvgIcon size={20}>
+                        heroicons-solid:at-symbol
+                      </FuseSvgIcon>
                     </InputAdornment>
                   ),
                 }}
@@ -288,23 +330,25 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
             )}
           />
           <Controller
-            name="password"
+            name='password'
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                className="mt-32"
-                label="Password"
-                type="password"
+                className='mt-32'
+                label='Password'
+                type='password'
                 error={!!errors.password}
                 helperText={errors?.password?.message}
-                variant="outlined"
+                variant='outlined'
                 required
                 fullWidth
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">
-                      <FuseSvgIcon size={20}>heroicons-solid:lock-closed</FuseSvgIcon>
+                    <InputAdornment position='start'>
+                      <FuseSvgIcon size={20}>
+                        heroicons-solid:lock-closed
+                      </FuseSvgIcon>
                     </InputAdornment>
                   ),
                 }}
@@ -312,21 +356,23 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
             )}
           />
           <Controller
-            name="category"
+            name='category'
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                className="mt-32"
-                label="category"
-                type="text"
-                variant="outlined"
+                className='mt-32'
+                label='category'
+                type='text'
+                variant='outlined'
                 required
                 fullWidth
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position="start">
-                      <FuseSvgIcon size={20}>heroicons-solid:color-swatch</FuseSvgIcon>
+                    <InputAdornment position='start'>
+                      <FuseSvgIcon size={20}>
+                        heroicons-solid:color-swatch
+                      </FuseSvgIcon>
                     </InputAdornment>
                   ),
                 }}
@@ -335,35 +381,36 @@ const EditeModal = ({ handleSideBar, freelancer }) => {
           />
         </div>
         <Box
-          className="flex items-center mt-40 py-14 pr-16 pl-4 sm:pr-48 sm:pl-36 border-t"
+          className='flex items-center mt-40 py-14 pr-16 pl-4 sm:pr-48 sm:pl-36 border-t'
           sx={{ backgroundColor: 'background.default' }}
         >
-          {routeParams.id !== 'new' && (
+          {freelancer !== null && (
             <Button
-              color="error"
+              color='error'
               onClick={() => {
-                setValue('name', 'test');
+                handleFreelancerDelete(freelancer._id);
               }}
             >
               Delete
             </Button>
           )}
           <Button
-            className="ml-auto"
+            className='ml-auto'
             onClick={() => {
               handleSideBar(false);
             }}
           >
             Cancel
           </Button>
+
           <Button
-            className="ml-8"
-            variant="contained"
-            color="secondary"
+            className='ml-8'
+            variant='contained'
+            color='secondary'
             disabled={_.isEmpty(dirtyFields) || !isValid}
-            type="submit"
+            type='submit'
           >
-            Save
+            {freelancer ? 'Edite' : 'Save'}
           </Button>
         </Box>
       </form>

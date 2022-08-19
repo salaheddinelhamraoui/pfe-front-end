@@ -28,7 +28,7 @@ function FreelancerInfo({ freelancer, className }) {
             color: 'text.secondary',
           }}
           className='avatar text-32 font-bold w-96 h-96'
-          src='assets/images/avatars/brian-hughes.jpg'
+          src={freelancer.data.photoURL}
           alt='avatar'
         ></Avatar>
       </div>
