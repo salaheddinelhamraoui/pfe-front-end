@@ -59,7 +59,23 @@ const navigationConfig = [
     url: "/projects",
   },
   {
-    id: "home",
+    id: "calendar",
+    title: "Calendar",
+    type: "item",
+    icon: "heroicons-outline:terminal",
+    auth: authRoles.admin,
+    url: "/calendar-admin",
+  },
+  {
+    id: "documents-admin",
+    title: "Documents",
+    type: "item",
+    icon: "heroicons-outline:terminal",
+    auth: authRoles.admin,
+    url: "/documents-admin",
+  },
+  {
+    id: "home-freelancer",
     title: "Home",
     type: "item",
     icon: "heroicons-outline:home",
@@ -67,7 +83,7 @@ const navigationConfig = [
     url: "/home",
   },
   {
-    id: "calendar",
+    id: "calendar-freelancer",
     title: "Calendar",
     type: "item",
     icon: "heroicons-outline:calendar",
@@ -75,7 +91,7 @@ const navigationConfig = [
     url: "/calendar",
   },
   {
-    id: "clients",
+    id: "clients-freelancer",
     title: "Clients",
     type: "item",
     icon: "heroicons-outline:user-group",
@@ -83,7 +99,7 @@ const navigationConfig = [
     url: "/clients",
   },
   {
-    id: "documents",
+    id: "documents-freelancer",
     title: "Documents",
     type: "item",
     icon: "heroicons-outline:folder-open",
