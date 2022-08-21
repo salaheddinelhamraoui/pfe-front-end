@@ -1,68 +1,282 @@
-import Button from "@mui/material/Button";
-import NavLinkAdapter from "@fuse/core/NavLinkAdapter";
-import { useParams } from "react-router-dom";
-import FuseLoading from "@fuse/core/FuseLoading";
-import _ from "@lodash";
-import * as yup from "yup";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import Box from "@mui/system/Box";
-import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
-import Avatar from "@mui/material/Avatar";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Autocomplete from "@mui/material/Autocomplete/Autocomplete";
-import Checkbox from "@mui/material/Checkbox/Checkbox";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { useState, useEffect } from 'react';
+import Button from '@mui/material/Button';
+import { useParams } from 'react-router-dom';
+import _ from '@lodash';
+import * as yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import Box from '@mui/system/Box';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Avatar from '@mui/material/Avatar';
+import FuseLoading from '@fuse/core/FuseLoading';
+import { useDispatch } from 'react-redux';
+import { showMessage } from 'app/store/fuse/messageSlice';
+import axios from 'axios';
 
 /**
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  name: yup.string().required("You must enter a name"),
+  name: yup.string(),
+  email: yup.string().email('You must enter a valid email'),
+  password: yup.string(),
 });
 
-const EditeModal = ({ handleSideBar }) => {
+const EditModal = ({ handleSideBar, company, getCompanies }) => {
+  const [fileInputState, setFileInputState] = useState('');
+  const [previewSource, setPreviewSource] = useState('');
+  const [selectedFile, setSelectedFile] = useState('');
+  const [loadingState, setLoadingState] = useState(false);
   const routeParams = useParams();
+  const dispatch = useDispatch();
 
-  const { control, watch, reset, handleSubmit, formState, getValues } = useForm(
-    {
-      mode: "onChange",
-      resolver: yupResolver(schema),
-    }
-  );
+  const {
+    control,
+    watch,
+    reset,
+    handleSubmit,
+    formState,
+    getValues,
+    setValue,
+  } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(schema),
+  });
 
   const { isValid, dirtyFields, errors } = formState;
 
   const form = watch();
 
+  useEffect(() => {
+    if (company) {
+      setValue('name', company.data.displayName);
+      setValue('email', company.data.email);
+      setValue('category', company.category);
+      setPreviewSource(company.data.photoURL);
+    } else {
+      setValue('name', '');
+      setValue('email', '');
+      setValue('category', '');
+      setPreviewSource(null);
+    }
+  }, [company]);
+
   /**
    * Form Submit
    */
 
-  // if (_.isEmpty(form) || !contact) {
-  //   return <FuseLoading />;
-  // }
+  const handleFileInputChange = (e) => {
+    const file = e.target.files[0];
+    previewFile(file);
+    setSelectedFile(file);
+    setFileInputState(e.target.value);
+  };
+
+  const previewFile = (file) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewSource(reader.result);
+    };
+  };
+
+  const onSubmit = ({ name, email, password, category }) => {
+    if (!company) {
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = () => {
+          const base64EncodedImage = reader.result;
+
+          axios
+            .post(`${process.env.REACT_APP_API_URL}/register`, {
+              data: {
+                displayName: name,
+                email,
+                photoURL: base64EncodedImage,
+              },
+              password,
+              role: 'company',
+              category,
+            })
+            .then((res) => {
+              dispatch(showMessage({ message: 'Company Added successfully' }));
+              getCompanies();
+              reset({
+                name: '',
+                email: '',
+                password: '',
+                category: '',
+              });
+
+              setSelectedFile('');
+              setFileInputState('');
+              setPreviewSource('');
+              setLoadingState(false);
+              handleSideBar(false);
+            })
+            .catch((res) => {
+              console.log(res.response.data.message);
+              dispatch(showMessage({ message: res.response.data.message }));
+              setLoadingState(false);
+            });
+        };
+
+        reader.onerror = () => {
+          console.error('failed to load your image!!');
+          dispatch(showMessage({ message: 'failed to load your image!!' }));
+          setLoadingState(false);
+        };
+      } else {
+        axios
+          .post(`${process.env.REACT_APP_API_URL}/register`, {
+            data: {
+              displayName: name,
+              email,
+            },
+            password,
+            role: 'company',
+            category,
+          })
+          .then((res) => {
+            dispatch(showMessage({ message: 'Company Added successfully' }));
+            getCompanies();
+            reset({
+              name: '',
+              email: '',
+              password: '',
+              category: '',
+            });
+
+            setSelectedFile('');
+            setFileInputState('');
+            setPreviewSource('');
+            setLoadingState(false);
+            handleSideBar(false);
+          })
+          .catch((res) => {
+            console.log(res.response.data.message);
+            dispatch(showMessage({ message: res.response.data.message }));
+            setLoadingState(false);
+          });
+      }
+    } else {
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.readAsDataURL(selectedFile);
+        reader.onloadend = () => {
+          const base64EncodedImage = reader.result;
+
+          axios
+            .patch(
+              `${process.env.REACT_APP_API_URL}/updateUser/${company._id}`,
+              {
+                data: {
+                  displayName: name === '' ? null : name,
+                  email: company.data.email,
+                  photoURL: base64EncodedImage,
+                },
+                category: category === '' ? null : category,
+              }
+            )
+            .then((res) => {
+              dispatch(
+                showMessage({ message: 'Company Updated successfully' })
+              );
+              getCompanies();
+              reset({
+                name: '',
+                email: '',
+                password: '',
+                category: '',
+              });
+
+              setSelectedFile('');
+              setFileInputState('');
+              setPreviewSource('');
+              setLoadingState(false);
+              handleSideBar(false);
+            })
+            .catch((res) => {
+              console.log(res.response.data.message);
+              dispatch(showMessage({ message: res.response.data.message }));
+              setLoadingState(false);
+            });
+        };
+
+        reader.onerror = () => {
+          console.error('failed to load your image!!');
+          dispatch(showMessage({ message: 'failed to load your image!!' }));
+          setLoadingState(false);
+        };
+      } else {
+        axios
+          .patch(`${process.env.REACT_APP_API_URL}/updateUser/${company._id}`, {
+            data: {
+              displayName: name === '' ? null : name,
+              email: company.data.email,
+              photoLink: company.data.photoURL,
+            },
+            category: category === '' ? null : category,
+          })
+          .then((res) => {
+            dispatch(showMessage({ message: 'Company Updated successfully' }));
+            getCompanies();
+            reset({
+              name: '',
+              email: '',
+              password: '',
+              category: '',
+            });
+
+            setSelectedFile('');
+            setFileInputState('');
+            setPreviewSource('');
+            setLoadingState(false);
+            handleSideBar(false);
+          })
+          .catch((res) => {
+            console.log(res);
+            dispatch(showMessage({ message: res.response.data.message }));
+            setLoadingState(false);
+          });
+      }
+      setLoadingState(false);
+    }
+  };
+
+  const handleCompanyDelete = (companyId) => {
+    if (companyId) {
+      setLoadingState(true);
+      // delete Company
+      axios
+        .delete(`${process.env.REACT_APP_API_URL}/deleteUser/${companyId}`)
+        .then(() => {
+          dispatch(showMessage({ message: 'Company Deleted Successfully' }));
+          getCompanies();
+          setLoadingState(false);
+          handleSideBar(false);
+        })
+        .catch((err) => {
+          dispatch(showMessage({ message: err.response.data.message }));
+          setLoadingState(false);
+        });
+    }
+  };
+
+  if (loadingState) {
+    return <FuseLoading />;
+  }
 
   return (
     <>
-      <Box
-        className="relative w-full h-160 sm:h-192 px-32 sm:px-48"
-        sx={{
-          backgroundColor: "bg-black",
-        }}
-      >
-        <img
-          className="absolute inset-0 object-cover w-full h-full"
-          src="https://dev.co/wp-content/uploads/2021/01/Website-Development-Company.jpg"
-          alt="user background"
-        />
-      </Box>
       <IconButton
-        className="absolute top-0 right-0 my-16 mx-32 z-10"
-        sx={{ color: "white" }}
-        size="large"
+        className='absolute top-0 right-0 my-16 mx-32 z-10  '
+        sx={{ color: 'black' }}
+        size='large'
         onClick={() => {
           handleSideBar(false);
         }}
@@ -70,177 +284,234 @@ const EditeModal = ({ handleSideBar }) => {
         <FuseSvgIcon>heroicons-outline:x</FuseSvgIcon>
       </IconButton>
 
-      <div className="relative flex flex-col flex-auto items-center px-24 sm:px-48">
-        <div className="w-full">
-          <div className="flex flex-auto items-end -mt-64">
-            <Controller
-              control={control}
-              name="avatar"
-              render={({ field: { onChange, value } }) => (
-                <Box
-                  sx={{
-                    borderWidth: 4,
-                    borderStyle: "solid",
-                    borderColor: "background.paper",
-                  }}
-                  className="relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden"
-                >
-                  <div className="absolute inset-0 bg-black bg-opacity-50 z-10" />
-                  <div className="absolute inset-0 flex items-center justify-center z-20">
-                    <div>
-                      <label
-                        htmlFor="button-avatar"
-                        className="flex p-8 cursor-pointer"
-                      >
-                        <input
-                          accept="image/*"
-                          className="hidden"
-                          id="button-avatar"
-                          type="file"
-                          onChange={() => {}}
-                        />
-                        <FuseSvgIcon className="text-white">
-                          heroicons-outline:camera
-                        </FuseSvgIcon>
-                      </label>
-                    </div>
-                    <div>
-                      <IconButton onClick={() => {}}>
-                        <FuseSvgIcon className="text-white">
-                          heroicons-solid:trash
-                        </FuseSvgIcon>
-                      </IconButton>
-                    </div>
-                  </div>
-                  <Avatar
-                    sx={{
-                      backgroundColor: "background.default",
-                      color: "text.secondary",
-                    }}
-                    className="object-cover w-full h-full text-64 font-bold"
-                    src="/assets/images/apps/ecommerce/fall-glow.jpg"
-                    alt="company logo"
-                  >
-                    Company Name
-                  </Avatar>
-                </Box>
-              )}
-            />
-          </div>
-        </div>
-
-        <Controller
-          control={control}
-          name="name"
-          render={({ field }) => (
-            <TextField
-              className="mt-32"
-              {...field}
-              label="Name"
-              placeholder="Name"
-              id="name"
-              error={!!errors.name}
-              helperText={errors?.name?.message}
-              variant="outlined"
-              required
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FuseSvgIcon size={20}>
-                      heroicons-solid:user-circle
-                    </FuseSvgIcon>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="category"
-          render={({ field }) => (
-            <TextField
-              className="mt-32"
-              {...field}
-              label="Category"
-              placeholder="Category"
-              id="category"
-              error={!!errors.category}
-              helperText={errors?.category?.message}
-              variant="outlined"
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FuseSvgIcon size={20}>
-                      heroicons-solid:office-building
-                    </FuseSvgIcon>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )}
-        />
-
-        <Controller
-          control={control}
-          name="address"
-          render={({ field }) => (
-            <TextField
-              className="mt-32"
-              {...field}
-              label="Address"
-              placeholder="Address"
-              id="address"
-              error={!!errors.address}
-              helperText={errors?.address?.message}
-              variant="outlined"
-              fullWidth
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment position="start">
-                    <FuseSvgIcon size={20}>
-                      heroicons-solid:location-marker
-                    </FuseSvgIcon>
-                  </InputAdornment>
-                ),
-              }}
-            />
-          )}
-        />
+      <div className='mt-32'>
+        <p> </p>
       </div>
-
-      <Box
-        className="flex items-center mt-40 py-14 pr-16 pl-4 sm:pr-48 sm:pl-36 border-t"
-        sx={{ backgroundColor: "background.default" }}
+      <form
+        name='addCompanyForm'
+        noValidate
+        className='flex flex-col justify-center w-full mt-32'
+        onSubmit={handleSubmit(onSubmit)}
       >
-        {routeParams.id !== "new" && (
-          <Button color="error" onClick={() => {}}>
-            Delete
+        <div className='flex mx-auto'>
+          <Controller
+            control={control}
+            name='avatar'
+            render={({ field: { onChange, value } }) => (
+              <Box
+                sx={{
+                  borderWidth: 4,
+                  borderStyle: 'solid',
+                  borderColor: 'background.paper',
+                }}
+                className='relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden'
+              >
+                <div className='absolute inset-0 bg-black bg-opacity-50 z-10' />
+                <div className='absolute inset-0 flex items-center justify-center z-20'>
+                  <div>
+                    <label
+                      htmlFor='button-avatar'
+                      className='flex p-8 cursor-pointer'
+                    >
+                      <input
+                        accept='image/*'
+                        className='hidden'
+                        id='button-avatar'
+                        type='file'
+                        onChange={handleFileInputChange}
+                      />
+                      <FuseSvgIcon className='text-white'>
+                        heroicons-outline:camera
+                      </FuseSvgIcon>
+                    </label>
+                  </div>
+                  <div>
+                    <IconButton
+                      onClick={() => {
+                        setSelectedFile('');
+                        setFileInputState('');
+                        setPreviewSource('');
+                      }}
+                    >
+                      <FuseSvgIcon className='text-white'>
+                        heroicons-solid:trash
+                      </FuseSvgIcon>
+                    </IconButton>
+                  </div>
+                </div>
+                <Avatar
+                  sx={{
+                    backgroundColor: 'background.default',
+                    color: 'text.secondary',
+                  }}
+                  className='object-cover w-full h-full text-64 font-bold'
+                  src={
+                    previewSource ||
+                    'https://monstar-lab.com/global/wp-content/uploads/sites/11/2019/04/male-placeholder-image.jpeg'
+                  }
+                  alt='company logo'
+                >
+                  Company Name
+                </Avatar>
+              </Box>
+            )}
+          />
+        </div>
+        <div className='relative flex flex-col flex-auto items-center px-24 sm:px-48'>
+          <Controller
+            control={control}
+            name='name'
+            render={({ field }) => (
+              <TextField
+                className='mt-32'
+                {...field}
+                label='Name'
+                placeholder='Name'
+                id='name'
+                error={!!errors.name}
+                helperText={errors?.name?.message}
+                variant='outlined'
+                required
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <FuseSvgIcon size={20}>
+                        heroicons-solid:user-circle
+                      </FuseSvgIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name='email'
+            render={({ field }) => {
+              if (!company) {
+                return (
+                  <TextField
+                    className='mt-32'
+                    {...field}
+                    label='Email'
+                    placeholder='email'
+                    id='email'
+                    variant='outlined'
+                    required
+                    fullWidth
+                    error={!!errors.email}
+                    helperText={errors?.email?.message}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <FuseSvgIcon size={20}>
+                            heroicons-solid:at-symbol
+                          </FuseSvgIcon>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                );
+              } else {
+                return <p></p>;
+              }
+            }}
+          />
+          <Controller
+            name='password'
+            control={control}
+            render={({ field }) => {
+              if (!company) {
+                return (
+                  <TextField
+                    {...field}
+                    className='mt-32'
+                    label='Password'
+                    type='password'
+                    error={!!errors.password}
+                    helperText={errors?.password?.message}
+                    variant='outlined'
+                    required
+                    fullWidth
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position='start'>
+                          <FuseSvgIcon size={20}>
+                            heroicons-solid:lock-closed
+                          </FuseSvgIcon>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                );
+              } else {
+                return <p></p>;
+              }
+            }}
+          />
+          <Controller
+            name='category'
+            control={control}
+            render={({ field }) => (
+              <TextField
+                {...field}
+                className='mt-32'
+                label='category'
+                type='text'
+                variant='outlined'
+                required
+                fullWidth
+                InputProps={{
+                  startAdornment: (
+                    <InputAdornment position='start'>
+                      <FuseSvgIcon size={20}>
+                        heroicons-solid:color-swatch
+                      </FuseSvgIcon>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+            )}
+          />
+        </div>
+        <Box
+          className='flex items-center mt-40 py-14 pr-16 pl-4 sm:pr-48 sm:pl-36 border-t'
+          sx={{ backgroundColor: 'background.default' }}
+        >
+          {company !== null && (
+            <Button
+              color='error'
+              onClick={() => {
+                handleCompanyDelete(company._id);
+              }}
+            >
+              Delete
+            </Button>
+          )}
+          <Button
+            className='ml-auto'
+            onClick={() => {
+              handleSideBar(false);
+            }}
+          >
+            Cancel
           </Button>
-        )}
-        <Button
-          className="ml-auto"
-          onClick={() => {
-            handleSideBar(false);
-          }}
-        >
-          Cancel
-        </Button>
-        <Button
-          className="ml-8"
-          variant="contained"
-          color="secondary"
-          disabled={_.isEmpty(dirtyFields) || !isValid}
-          onClick={() => {}}
-        >
-          Save
-        </Button>
-      </Box>
+
+          <Button
+            className='ml-8'
+            variant='contained'
+            color='secondary'
+            disabled={_.isEmpty(dirtyFields) || !isValid}
+            type='submit'
+          >
+            {company ? 'Edit' : 'Save'}
+          </Button>
+        </Box>
+      </form>
     </>
   );
 };
 
-export default EditeModal;
+export default EditModal;

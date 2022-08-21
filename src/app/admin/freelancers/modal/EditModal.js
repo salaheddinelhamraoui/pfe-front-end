@@ -188,8 +188,8 @@ const EditModal = ({
                 data: {
                   displayName: name === '' ? null : name,
                   email: freelancer.data.email,
+                  photoURL: base64EncodedImage,
                 },
-                password: password === '' ? null : password,
                 category: category === '' ? null : category,
               }
             )
@@ -232,8 +232,8 @@ const EditModal = ({
               data: {
                 displayName: name === '' ? null : name,
                 email: freelancer.data.email,
+                photoLink: freelancer.data.photoURL,
               },
-              password: password === '' ? null : password,
               category: category === '' ? null : category,
             }
           )

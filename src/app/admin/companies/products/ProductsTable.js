@@ -1,28 +1,28 @@
-import FuseScrollbars from "@fuse/core/FuseScrollbars";
-import _ from "@lodash";
-import Checkbox from "@mui/material/Checkbox";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TablePagination from "@mui/material/TablePagination";
-import TableRow from "@mui/material/TableRow";
-import Typography from "@mui/material/Typography";
-import clsx from "clsx";
-import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import FuseScrollbars from '@fuse/core/FuseScrollbars';
+import _ from '@lodash';
+import Checkbox from '@mui/material/Checkbox';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import Typography from '@mui/material/Typography';
+import clsx from 'clsx';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
 
-import { useDispatch, useSelector } from "react-redux";
-import withRouter from "@fuse/core/withRouter";
-import FuseLoading from "@fuse/core/FuseLoading";
-import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import { useDispatch, useSelector } from 'react-redux';
+import withRouter from '@fuse/core/withRouter';
+import FuseLoading from '@fuse/core/FuseLoading';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import {
   getProducts,
   selectProducts,
   selectProductsSearchText,
-} from "../store/productsSlice";
-import ProductsTableHead from "./ProductsTableHead";
+} from '../store/productsSlice';
+import ProductsTableHead from './ProductsTableHead';
 
-function ProductsTable({ handleSideBar }) {
+function ProductsTable({ handleSideBar, companies, handleSelectedCompany }) {
   const dispatch = useDispatch();
   const products = useSelector(selectProducts);
   const searchText = useSelector(selectProductsSearchText);
@@ -33,7 +33,7 @@ function ProductsTable({ handleSideBar }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [order, setOrder] = useState({
-    direction: "asc",
+    direction: 'asc',
     id: null,
   });
 
@@ -56,10 +56,10 @@ function ProductsTable({ handleSideBar }) {
 
   function handleRequestSort(event, property) {
     const id = property;
-    let direction = "desc";
+    let direction = 'desc';
 
-    if (order.id === property && order.direction === "desc") {
-      direction = "asc";
+    if (order.id === property && order.direction === 'desc') {
+      direction = 'asc';
     }
 
     setOrder({
@@ -114,7 +114,7 @@ function ProductsTable({ handleSideBar }) {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">
+      <div className='flex items-center justify-center h-full'>
         <FuseLoading />
       </div>
     );
@@ -125,9 +125,9 @@ function ProductsTable({ handleSideBar }) {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1, transition: { delay: 0.1 } }}
-        className="flex flex-1 items-center justify-center h-full"
+        className='flex flex-1 items-center justify-center h-full'
       >
-        <Typography color="text.secondary" variant="h5">
+        <Typography color='text.secondary' variant='h5'>
           There are no Companies!
         </Typography>
       </motion.div>
@@ -135,9 +135,9 @@ function ProductsTable({ handleSideBar }) {
   }
 
   return (
-    <div className="w-full flex flex-col min-h-full">
-      <FuseScrollbars className="grow overflow-x-auto">
-        <Table stickyHeader className="min-w-xl" aria-labelledby="tableTitle">
+    <div className='w-full flex flex-col min-h-full'>
+      <FuseScrollbars className='grow overflow-x-auto'>
+        <Table stickyHeader className='min-w-xl' aria-labelledby='tableTitle'>
           <ProductsTableHead
             selectedProductIds={selected}
             order={order}
@@ -148,35 +148,21 @@ function ProductsTable({ handleSideBar }) {
           />
 
           <TableBody>
-            {_.orderBy(
-              data,
-              [
-                (o) => {
-                  switch (order.id) {
-                    case "categories": {
-                      return o.categories[0];
-                    }
-                    default: {
-                      return o[order.id];
-                    }
-                  }
-                },
-              ],
-              [order.direction]
-            )
+            {_.orderBy(companies, [order.direction])
               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
               .map((n) => {
-                const isSelected = selected.indexOf(n.id) !== -1;
+                const isSelected = selected.indexOf(n._id) !== -1;
                 return (
                   <TableRow
-                    className="h-72 cursor-pointer"
+                    className='h-72 cursor-pointer'
                     hover
-                    role="checkbox"
+                    role='checkbox'
                     aria-checked={isSelected}
                     tabIndex={-1}
-                    key={n.id}
+                    key={n._id}
                     selected={isSelected}
                     onClick={() => {
+                      handleSelectedCompany(n);
                       handleSideBar(true);
                     }}
                   >
@@ -189,71 +175,70 @@ function ProductsTable({ handleSideBar }) {
                     </TableCell> */}
 
                     <TableCell
-                      className="w-52 mx-8 px-8 "
-                      component="th"
-                      scope="row"
-                      padding="none"
+                      className='w-52 mx-8 px-8 '
+                      component='th'
+                      scope='row'
+                      padding='none'
                     >
-                      {n.images.length > 0 && n.featuredImageId ? (
-                        <img
-                          className="w-full block rounded"
-                          src={_.find(n.images, { id: n.featuredImageId }).url}
-                          alt={n.name}
-                        />
-                      ) : (
-                        <img
-                          className="w-full block rounded"
-                          src="assets/images/apps/ecommerce/product-image-placeholder.png"
-                          alt={n.name}
-                        />
-                      )}
+                      <img
+                        className='w-full block rounded'
+                        src={n.data.photoURL}
+                        alt={n.data.displayName}
+                      />
                     </TableCell>
 
                     <TableCell
-                      className="p-4 md:p-16"
-                      component="th"
-                      scope="row"
+                      className='p-4 md:p-16'
+                      component='th'
+                      scope='row'
                     >
-                      {n.name}
+                      {n.data.displayName}
+                    </TableCell>
+                    <TableCell
+                      className='p-4 md:p-16'
+                      component='th'
+                      scope='row'
+                    >
+                      {n._id}
                     </TableCell>
 
                     <TableCell
-                      className="p-4 md:p-16 truncate"
-                      component="th"
-                      scope="row"
+                      className='p-4 md:p-16 truncate'
+                      component='th'
+                      scope='row'
                     >
-                      {n.categories.join(", ")}
+                      {n.category}
                     </TableCell>
 
                     <TableCell
-                      className="p-4 md:p-16"
-                      component="th"
-                      scope="row"
-                      align="right"
+                      className='p-4 md:p-16'
+                      component='th'
+                      scope='row'
+                      align='right'
                     >
-                      {n.quantity}
+                      5
                       <i
                         className={clsx(
-                          "inline-block w-8 h-8 rounded mx-8",
-                          n.quantity <= 5 && "bg-red",
-                          n.quantity > 5 && n.quantity <= 25 && "bg-orange",
-                          n.quantity > 25 && "bg-green"
+                          'inline-block w-8 h-8 rounded mx-8'
+                          // n.quantity <= 5 && 'bg-red',
+                          // n.quantity > 5 && n.quantity <= 25 && 'bg-orange',
+                          // n.quantity > 25 && 'bg-green'
                         )}
                       />
                     </TableCell>
 
                     <TableCell
-                      className="p-4 md:p-16 "
-                      component="th"
-                      scope="row"
-                      align="right"
+                      className='p-4 md:p-16 '
+                      component='th'
+                      scope='row'
+                      align='right'
                     >
-                      {n.active ? (
-                        <FuseSvgIcon className="text-green ml-auto " size={20}>
+                      {true ? (
+                        <FuseSvgIcon className='text-green ml-auto ' size={20}>
                           heroicons-outline:check-circle
                         </FuseSvgIcon>
                       ) : (
-                        <FuseSvgIcon className="text-red ml-auto" size={20}>
+                        <FuseSvgIcon className='text-red ml-auto' size={20}>
                           heroicons-outline:minus-circle
                         </FuseSvgIcon>
                       )}
@@ -266,16 +251,16 @@ function ProductsTable({ handleSideBar }) {
       </FuseScrollbars>
 
       <TablePagination
-        className="shrink-0 border-t-1"
-        component="div"
+        className='shrink-0 border-t-1'
+        component='div'
         count={data.length}
         rowsPerPage={rowsPerPage}
         page={page}
         backIconButtonProps={{
-          "aria-label": "Previous Page",
+          'aria-label': 'Previous Page',
         }}
         nextIconButtonProps={{
-          "aria-label": "Next Page",
+          'aria-label': 'Next Page',
         }}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}

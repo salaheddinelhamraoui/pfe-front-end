@@ -1,18 +1,18 @@
-import FusePageSimple from "@fuse/core/FusePageSimple";
-import withReducer from "app/store/withReducer";
-import useThemeMediaQuery from "@fuse/hooks/useThemeMediaQuery";
+import FusePageSimple from '@fuse/core/FusePageSimple';
+import withReducer from 'app/store/withReducer';
+import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 
-import { useRef, useState } from "react";
-import { styled } from "@mui/material/styles";
+import { useRef, useState } from 'react';
+import { styled } from '@mui/material/styles';
 
-import EditeModal from "../modal/EditeModal";
+import EditeModal from '../modal/EditeModal';
 
-import reducer from "../store";
-import ProductsHeader from "./ProductsHeader";
-import ProductsTable from "./ProductsTable";
+import reducer from '../store';
+import ProductsHeader from './ProductsHeader';
+import ProductsTable from './ProductsTable';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
-  "& .FusePageSimple-header": {
+  '& .FusePageSimple-header': {
     backgroundColor: theme.palette.background.white,
   },
 }));
@@ -20,7 +20,7 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 function Products() {
   const pageLayout = useRef(null);
   const [rightSidebarOpen, setRightSidebarOpen] = useState(false);
-  const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
 
   const handleSideBar = (state) => {
     setRightSidebarOpen(state);
@@ -34,10 +34,10 @@ function Products() {
       rightSidebarContent={<EditeModal handleSideBar={handleSideBar} />}
       rightSidebarOpen={rightSidebarOpen}
       rightSidebarOnClose={() => setRightSidebarOpen(false)}
-      rightSidebarWidth={640}
-      scroll={isMobile ? "normal" : "content"}
+      rightSidebarWidth={440}
+      scroll={isMobile ? 'normal' : 'content'}
     />
   );
 }
 
-export default withReducer("eCommerceApp", reducer)(Products);
+export default withReducer('eCommerceApp', reducer)(Products);
