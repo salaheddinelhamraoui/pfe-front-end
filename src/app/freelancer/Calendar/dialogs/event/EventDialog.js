@@ -1,18 +1,16 @@
-import { yupResolver } from "@hookform/resolvers/yup";
-import { Controller, useForm } from "react-hook-form";
-import FuseUtils from "@fuse/utils/FuseUtils";
-import Button from "@mui/material/Button";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import IconButton from "@mui/material/IconButton";
-import Switch from "@mui/material/Switch";
-import TextField from "@mui/material/TextField";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import * as yup from "yup";
-import _ from "@lodash";
-import { Popover } from "@mui/material";
-import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Controller, useForm } from 'react-hook-form';
+import FuseUtils from '@fuse/utils/FuseUtils';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import TextField from '@mui/material/TextField';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import * as yup from 'yup';
+import _ from '@lodash';
+import { Popover } from '@mui/material';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import {
   addEvent,
   closeEditEventDialog,
@@ -20,10 +18,10 @@ import {
   removeEvent,
   selectEventDialog,
   updateEvent,
-} from "../../store/eventsSlice";
-import EventLabelSelect from "../../EventLabelSelect";
-import EventModel from "../../model/EventModel";
-import { selectFirstLabelId } from "../../store/labelsSlice";
+} from '../../store/eventsSlice';
+import EventLabelSelect from '../../EventLabelSelect';
+import EventModel from '../../model/EventModel';
+import { selectFirstLabelId } from '../../store/labelsSlice';
 
 const defaultValues = EventModel();
 
@@ -31,7 +29,7 @@ const defaultValues = EventModel();
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  title: yup.string().required("You must enter a title"),
+  title: yup.string().required('You must enter a title'),
 });
 
 function EventDialog(props) {
@@ -41,15 +39,15 @@ function EventDialog(props) {
 
   const { reset, formState, watch, control, getValues } = useForm({
     defaultValues,
-    mode: "onChange",
+    mode: 'onChange',
     resolver: yupResolver(schema),
   });
 
   const { isValid, dirtyFields, errors } = formState;
 
-  const start = watch("start");
-  const end = watch("end");
-  const id = watch("id");
+  const start = watch('start');
+  const end = watch('end');
+  const id = watch('id');
 
   /**
    * Initialize Dialog with Data
@@ -58,14 +56,14 @@ function EventDialog(props) {
     /**
      * Dialog type: 'edit'
      */
-    if (eventDialog.type === "edit" && eventDialog.data) {
+    if (eventDialog.type === 'edit' && eventDialog.data) {
       reset({ ...eventDialog.data });
     }
 
     /**
      * Dialog type: 'new'
      */
-    if (eventDialog.type === "new") {
+    if (eventDialog.type === 'new') {
       reset({
         ...defaultValues,
         ...eventDialog.data,
@@ -91,7 +89,7 @@ function EventDialog(props) {
    * Close Dialog
    */
   function closeComposeDialog() {
-    return eventDialog.type === "edit"
+    return eventDialog.type === 'edit'
       ? dispatch(closeEditEventDialog())
       : dispatch(closeNewEventDialog());
   }
@@ -102,7 +100,7 @@ function EventDialog(props) {
   function onSubmit(ev) {
     ev.preventDefault();
     const data = getValues();
-    if (eventDialog.type === "new") {
+    if (eventDialog.type === 'new') {
       dispatch(addEvent(data));
     } else {
       dispatch(updateEvent({ ...eventDialog.data, ...data }));
@@ -118,17 +116,19 @@ function EventDialog(props) {
     closeComposeDialog();
   }
 
+  console.log(eventDialog.props);
+
   return (
     <Popover
       {...eventDialog.props}
       anchorReference="anchorPosition"
       anchorOrigin={{
-        vertical: "center",
-        horizontal: "right",
+        vertical: 'center',
+        horizontal: 'right',
       }}
       transformOrigin={{
-        vertical: "center",
-        horizontal: "left",
+        vertical: 'center',
+        horizontal: 'left',
       }}
       onClose={closeComposeDialog}
       component="form"
@@ -175,11 +175,7 @@ function EventDialog(props) {
                     value={value}
                     onChange={onChange}
                     renderInput={(_props) => (
-                      <TextField
-                        label="Start"
-                        className="mt-8 mb-16 w-full"
-                        {..._props}
-                      />
+                      <TextField label="Start" className="mt-8 mb-16 w-full" {..._props} />
                     )}
                     className="mt-8 mb-16 w-full"
                     maxDate={end}
@@ -196,11 +192,7 @@ function EventDialog(props) {
                     value={value}
                     onChange={onChange}
                     renderInput={(_props) => (
-                      <TextField
-                        label="End"
-                        className="mt-8 mb-16 w-full"
-                        {..._props}
-                      />
+                      <TextField label="End" className="mt-8 mb-16 w-full" {..._props} />
                     )}
                     minDate={start}
                   />
@@ -238,9 +230,7 @@ function EventDialog(props) {
           <Controller
             name="extendedProps.label"
             control={control}
-            render={({ field }) => (
-              <EventLabelSelect className="mt-8 mb-16" {...field} />
-            )}
+            render={({ field }) => <EventLabelSelect className="mt-8 mb-16" {...field} />}
           />
         </div>
 
@@ -268,7 +258,7 @@ function EventDialog(props) {
           />
         </div>
 
-        {eventDialog.type === "new" ? (
+        {eventDialog.type === 'new' ? (
           <div className="flex items-center space-x-8">
             <div className="flex flex-1" />
             <Button

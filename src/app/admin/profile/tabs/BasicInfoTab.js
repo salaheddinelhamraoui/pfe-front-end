@@ -1,6 +1,5 @@
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import { Controller, useFormContext } from "react-hook-form";
+import TextField from '@mui/material/TextField';
+import { Controller, useFormContext } from 'react-hook-form';
 
 function BasicInfoTab(props) {
   const methods = useFormContext();
@@ -24,7 +23,7 @@ function BasicInfoTab(props) {
             id="name"
             variant="outlined"
             fullWidth
-            value={"Salaheddin El Hamraoui"}
+            value="Salaheddin El Hamraoui"
           />
         )}
       />
@@ -43,7 +42,7 @@ function BasicInfoTab(props) {
             id="Email"
             variant="outlined"
             fullWidth
-            value={"salah.infospace@gmail.com"}
+            value="salah.infospace@gmail.com"
           />
         )}
       />
@@ -62,7 +61,7 @@ function BasicInfoTab(props) {
             id="password"
             variant="outlined"
             fullWidth
-            value={"kmdskjdskfjlkds"}
+            value="kmdskjdskfjlkds"
             type="password"
           />
         )}
@@ -82,7 +81,7 @@ function BasicInfoTab(props) {
             id="confirm_password"
             variant="outlined"
             fullWidth
-            value={"kmdskjdskfjlkds"}
+            value="kmdskjdskfjlkds"
             type="password"
           />
         )}

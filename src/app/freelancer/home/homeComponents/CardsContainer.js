@@ -1,14 +1,12 @@
-import React from "react";
-import Grid from "@mui/system/Unstable_Grid/Grid";
-import Paper from "@mui/material/Paper";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
-import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
-import { Link } from "react-router-dom";
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import { Link } from 'react-router-dom';
 
-import { useSelector } from "react-redux";
-import { selectUser } from "app/store/userSlice";
+import { useSelector } from 'react-redux';
+import { selectUser } from 'app/store/userSlice';
 
 const CardsContainer = () => {
   const user = useSelector(selectUser);
@@ -41,7 +39,7 @@ const CardsContainer = () => {
               {user.role}
             </Typography>
             <Button
-              to={`/profile`}
+              to="/profile"
               component={Link}
               className="px-12 min-w-128 mb-24 mt-8"
               color="secondary"
@@ -73,7 +71,7 @@ const CardsContainer = () => {
             </div>
             <div className="ml-auto">
               <Button
-                to={`/validate-session`}
+                to="/validate-session"
                 component={Link}
                 className="px-12 min-w-128"
                 color="error"
@@ -96,7 +94,7 @@ const CardsContainer = () => {
             </div>
             <div className="ml-auto">
               <Button
-                to={`/validate-session`}
+                to="/validate-session"
                 component={Link}
                 className="px-12 min-w-128"
                 color="error"
@@ -119,7 +117,7 @@ const CardsContainer = () => {
             </div>
             <div className="ml-auto">
               <Button
-                to={`/validate-session`}
+                to="/validate-session"
                 component={Link}
                 className="px-12 min-w-128"
                 color="error"
@@ -162,7 +160,7 @@ const CardsContainer = () => {
                 Start Date
               </Typography>
             </div>
-            <div className="ml-auto"></div>
+            <div className="ml-auto" />
           </div>
           <div className="grid grid-cols-4  border rounded-lg  px-12 py-8 mx-12 mb-8">
             <div className="flex items-center justify-center">
@@ -182,7 +180,7 @@ const CardsContainer = () => {
             </div>
             <div className="ml-auto">
               <Button
-                to={`/`}
+                to="/"
                 component={Link}
                 className="px-12 min-w-128"
                 color="secondary"
@@ -215,7 +213,7 @@ const CardsContainer = () => {
             </div>
             <div className="ml-auto">
               <Button
-                to={`/`}
+                to="/"
                 component={Link}
                 className="px-12 min-w-128"
                 color="secondary"
@@ -248,7 +246,7 @@ const CardsContainer = () => {
             </div>
             <div className="ml-auto">
               <Button
-                to={`/`}
+                to="/"
                 component={Link}
                 className="px-12 min-w-128"
                 color="secondary"

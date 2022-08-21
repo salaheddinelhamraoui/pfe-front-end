@@ -1,100 +1,100 @@
-import { styled, useTheme } from "@mui/material/styles";
-import Typography from "@mui/material/Typography";
-import withReducer from "app/store/withReducer";
-import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import FullCalendar from "@fullcalendar/react";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction";
-import FusePageSimple from "@fuse/core/FusePageSimple";
-import _ from "@lodash";
-import clsx from "clsx";
-import { Box } from "@mui/system";
-import useThemeMediaQuery from "@fuse/hooks/useThemeMediaQuery";
-import CalendarHeader from "./CalendarHeader";
-import EventDialog from "./dialogs/event/EventDialog";
-import reducer from "./store";
+import { styled, useTheme } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+import withReducer from 'app/store/withReducer';
+import { useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import interactionPlugin from '@fullcalendar/interaction';
+import FusePageSimple from '@fuse/core/FusePageSimple';
+import _ from '@lodash';
+import clsx from 'clsx';
+import { Box } from '@mui/system';
+import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
+import CalendarHeader from './CalendarHeader';
+import EventDialog from './dialogs/event/EventDialog';
+import reducer from './store';
 import {
   getEvents,
   openEditEventDialog,
   openNewEventDialog,
   selectFilteredEvents,
   updateEvent,
-} from "./store/eventsSlice";
-import { getLabels, selectLabels } from "./store/labelsSlice";
-import LabelsDialog from "./dialogs/labels/LabelsDialog";
-import CalendarAppSidebar from "./CalendarAppSidebar";
+} from './store/eventsSlice';
+import { getLabels, selectLabels } from './store/labelsSlice';
+import LabelsDialog from './dialogs/labels/LabelsDialog';
+import CalendarAppSidebar from './CalendarAppSidebar';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
-  "& a": {
+  '& a': {
     color: `${theme.palette.text.primary}!important`,
-    textDecoration: "none!important",
+    textDecoration: 'none!important',
   },
-  "&  .fc-media-screen": {
-    minHeight: "100%",
-    width: "100%",
+  '&  .fc-media-screen': {
+    minHeight: '100%',
+    width: '100%',
   },
-  "& .fc-scrollgrid, & .fc-theme-standard td, & .fc-theme-standard th": {
+  '& .fc-scrollgrid, & .fc-theme-standard td, & .fc-theme-standard th': {
     borderColor: `${theme.palette.divider}!important`,
   },
-  "&  .fc-scrollgrid-section > td": {
+  '&  .fc-scrollgrid-section > td': {
     border: 0,
   },
-  "& .fc-daygrid-day": {
-    "&:last-child": {
+  '& .fc-daygrid-day': {
+    '&:last-child': {
       borderRight: 0,
     },
   },
-  "& .fc-col-header-cell": {
-    borderWidth: "0 1px 0 1px",
-    padding: "8px 0 0 0",
-    "& .fc-col-header-cell-cushion": {
+  '& .fc-col-header-cell': {
+    borderWidth: '0 1px 0 1px',
+    padding: '8px 0 0 0',
+    '& .fc-col-header-cell-cushion': {
       color: theme.palette.text.secondary,
       fontWeight: 500,
       fontSize: 12,
-      textTransform: "uppercase",
+      textTransform: 'uppercase',
     },
   },
-  "& .fc-view ": {
-    "& > .fc-scrollgrid": {
+  '& .fc-view ': {
+    '& > .fc-scrollgrid': {
       border: 0,
     },
   },
-  "& .fc-daygrid-day.fc-day-today": {
-    backgroundColor: "transparent!important",
-    "& .fc-daygrid-day-number": {
-      borderRadius: "100%",
+  '& .fc-daygrid-day.fc-day-today': {
+    backgroundColor: 'transparent!important',
+    '& .fc-daygrid-day-number': {
+      borderRadius: '100%',
       backgroundColor: `${theme.palette.secondary.main}!important`,
       color: `${theme.palette.secondary.contrastText}!important`,
     },
   },
-  "& .fc-daygrid-day-top": {
-    justifyContent: "center",
+  '& .fc-daygrid-day-top': {
+    justifyContent: 'center',
 
-    "& .fc-daygrid-day-number": {
+    '& .fc-daygrid-day-number': {
       color: theme.palette.text.secondary,
       fontWeight: 500,
       fontSize: 12,
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
+      display: 'inline-flex',
+      alignItems: 'center',
+      justifyContent: 'center',
       width: 26,
       height: 26,
-      margin: "4px 0",
-      borderRadius: "50%",
-      float: "none",
+      margin: '4px 0',
+      borderRadius: '50%',
+      float: 'none',
       lineHeight: 1,
     },
   },
-  "& .fc-h-event": {
-    background: "initial",
+  '& .fc-h-event': {
+    background: 'initial',
   },
-  "& .fc-event": {
+  '& .fc-event': {
     border: 0,
-    padding: "0 ",
+    padding: '0 ',
     fontSize: 12,
-    margin: "0 6px 4px 6px!important",
+    margin: '0 6px 4px 6px!important',
   },
 }));
 
@@ -103,7 +103,7 @@ function CalendarApp(props) {
   const dispatch = useDispatch();
   const events = useSelector(selectFilteredEvents);
   const calendarRef = useRef();
-  const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
+  const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
   const theme = useTheme();
   const labels = useSelector(selectLabels);
@@ -130,8 +130,7 @@ function CalendarApp(props) {
   };
 
   const handleEventDrop = (eventDropInfo) => {
-    const { id, title, allDay, start, end, extendedProps } =
-      eventDropInfo.event;
+    const { id, title, allDay, start, end, extendedProps } = eventDropInfo.event;
     dispatch(
       updateEvent({
         id,
@@ -152,19 +151,19 @@ function CalendarApp(props) {
     const label = _.find(
       [
         {
-          "id": "0",
-          "title": "Project 1",
-          "color": "#419388",
+          id: '0',
+          title: 'Project 1',
+          color: '#419388',
         },
         {
-          "id": "1",
-          "title": "Project 2",
-          "color": "#4151B0",
+          id: '1',
+          title: 'Project 2',
+          color: '#4151B0',
         },
         {
-          "id": "2",
-          "title": "Project 3",
-          "color": "#D63E63",
+          id: '2',
+          title: 'Project 3',
+          color: '#D63E63',
         },
       ],
       { id: labelId }
@@ -176,16 +175,10 @@ function CalendarApp(props) {
           backgroundColor: label?.color,
           color: label && theme.palette.getContrastText(label?.color),
         }}
-        className={clsx(
-          "flex items-center w-full rounded-4 px-8 py-2 h-22 text-white"
-        )}
+        className={clsx('flex items-center w-full rounded-4 px-8 py-2 h-22 text-white')}
       >
-        <Typography className="text-12 font-semibold">
-          {eventInfo.timeText}
-        </Typography>
-        <Typography className="text-12 px-4 truncate">
-          {eventInfo.event.title}
-        </Typography>
+        <Typography className="text-12 font-semibold">{eventInfo.timeText}</Typography>
+        <Typography className="text-12 px-4 truncate">{eventInfo.event.title}</Typography>
       </Box>
     );
   }
@@ -206,7 +199,6 @@ function CalendarApp(props) {
 
   return (
     <>
-      {console.log(JSON.stringify(events))}
       <Root
         header={
           <CalendarHeader
@@ -229,14 +221,14 @@ function CalendarApp(props) {
             select={handleDateSelect}
             events={[
               {
-                "id": "0",
-                "title": "Session Title",
-                "allDay": false,
-                "start": "2022-08-06T00:00:00+03:00",
-                "end": "2022-08-06T00:00:00+06:00",
-                "extendedProps": {
-                  "desc": "Session description",
-                  "label": "0",
+                id: '0',
+                title: 'Session Title',
+                allDay: false,
+                start: '2022-08-06T00:00:00+03:00',
+                end: '2022-08-06T00:00:00+06:00',
+                extendedProps: {
+                  desc: 'Session description',
+                  label: '0',
                 },
               },
             ]}
@@ -262,4 +254,4 @@ function CalendarApp(props) {
   );
 }
 
-export default withReducer("calendarApp", reducer)(CalendarApp);
+export default withReducer('calendarApp', reducer)(CalendarApp);

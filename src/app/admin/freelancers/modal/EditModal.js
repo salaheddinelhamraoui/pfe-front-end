@@ -25,12 +25,7 @@ const schema = yup.object().shape({
   password: yup.string(),
 });
 
-const EditModal = ({
-  handleSideBar,
-  freelancer,
-  getInitFreelancers,
-  handleCurrentPage,
-}) => {
+const EditModal = ({ handleSideBar, freelancer, getInitFreelancers, handleCurrentPage }) => {
   const [fileInputState, setFileInputState] = useState('');
   const [previewSource, setPreviewSource] = useState('');
   const [selectedFile, setSelectedFile] = useState('');
@@ -38,15 +33,7 @@ const EditModal = ({
   const routeParams = useParams();
   const dispatch = useDispatch();
 
-  const {
-    control,
-    watch,
-    reset,
-    handleSubmit,
-    formState,
-    getValues,
-    setValue,
-  } = useForm({
+  const { control, watch, reset, handleSubmit, formState, getValues, setValue } = useForm({
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
@@ -110,9 +97,7 @@ const EditModal = ({
               category,
             })
             .then((res) => {
-              dispatch(
-                showMessage({ message: 'Freelancer Added successfully' })
-              );
+              dispatch(showMessage({ message: 'Freelancer Added successfully' }));
               getInitFreelancers();
               handleCurrentPage(1);
               reset({
@@ -182,21 +167,16 @@ const EditModal = ({
           const base64EncodedImage = reader.result;
 
           axios
-            .patch(
-              `${process.env.REACT_APP_API_URL}/updateUser/${freelancer._id}`,
-              {
-                data: {
-                  displayName: name === '' ? null : name,
-                  email: freelancer.data.email,
-                  photoURL: base64EncodedImage,
-                },
-                category: category === '' ? null : category,
-              }
-            )
+            .patch(`${process.env.REACT_APP_API_URL}/updateUser/${freelancer._id}`, {
+              data: {
+                displayName: name === '' ? null : name,
+                email: freelancer.data.email,
+                photoURL: base64EncodedImage,
+              },
+              category: category === '' ? null : category,
+            })
             .then((res) => {
-              dispatch(
-                showMessage({ message: 'Freelancer Updated successfully' })
-              );
+              dispatch(showMessage({ message: 'Freelancer Updated successfully' }));
               getInitFreelancers();
               handleCurrentPage(1);
               reset({
@@ -226,21 +206,16 @@ const EditModal = ({
         };
       } else {
         axios
-          .patch(
-            `${process.env.REACT_APP_API_URL}/updateUser/${freelancer._id}`,
-            {
-              data: {
-                displayName: name === '' ? null : name,
-                email: freelancer.data.email,
-                photoLink: freelancer.data.photoURL,
-              },
-              category: category === '' ? null : category,
-            }
-          )
+          .patch(`${process.env.REACT_APP_API_URL}/updateUser/${freelancer._id}`, {
+            data: {
+              displayName: name === '' ? null : name,
+              email: freelancer.data.email,
+              photoLink: freelancer.data.photoURL,
+            },
+            category: category === '' ? null : category,
+          })
           .then((res) => {
-            dispatch(
-              showMessage({ message: 'Freelancer Updated successfully' })
-            );
+            dispatch(showMessage({ message: 'Freelancer Updated successfully' }));
             getInitFreelancers();
             handleCurrentPage(1);
             reset({
@@ -293,9 +268,9 @@ const EditModal = ({
   return (
     <>
       <IconButton
-        className='absolute top-0 right-0 my-16 mx-32 z-10  '
+        className="absolute top-0 right-0 my-16 mx-32 z-10  "
         sx={{ color: 'black' }}
-        size='large'
+        size="large"
         onClick={() => {
           handleSideBar(false);
         }}
@@ -303,19 +278,19 @@ const EditModal = ({
         <FuseSvgIcon>heroicons-outline:x</FuseSvgIcon>
       </IconButton>
 
-      <div className='mt-32'>
+      <div className="mt-32">
         <p> </p>
       </div>
       <form
-        name='addFreelancerForm'
+        name="addFreelancerForm"
         noValidate
-        className='flex flex-col justify-center w-full mt-32'
+        className="flex flex-col justify-center w-full mt-32"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <div className='flex mx-auto'>
+        <div className="flex mx-auto">
           <Controller
             control={control}
-            name='avatar'
+            name="avatar"
             render={({ field: { onChange, value } }) => (
               <Box
                 sx={{
@@ -323,25 +298,20 @@ const EditModal = ({
                   borderStyle: 'solid',
                   borderColor: 'background.paper',
                 }}
-                className='relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden'
+                className="relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden"
               >
-                <div className='absolute inset-0 bg-black bg-opacity-50 z-10' />
-                <div className='absolute inset-0 flex items-center justify-center z-20'>
+                <div className="absolute inset-0 bg-black bg-opacity-50 z-10" />
+                <div className="absolute inset-0 flex items-center justify-center z-20">
                   <div>
-                    <label
-                      htmlFor='button-avatar'
-                      className='flex p-8 cursor-pointer'
-                    >
+                    <label htmlFor="button-avatar" className="flex p-8 cursor-pointer">
                       <input
-                        accept='image/*'
-                        className='hidden'
-                        id='button-avatar'
-                        type='file'
+                        accept="image/*"
+                        className="hidden"
+                        id="button-avatar"
+                        type="file"
                         onChange={handleFileInputChange}
                       />
-                      <FuseSvgIcon className='text-white'>
-                        heroicons-outline:camera
-                      </FuseSvgIcon>
+                      <FuseSvgIcon className="text-white">heroicons-outline:camera</FuseSvgIcon>
                     </label>
                   </div>
                   <div>
@@ -352,9 +322,7 @@ const EditModal = ({
                         setPreviewSource('');
                       }}
                     >
-                      <FuseSvgIcon className='text-white'>
-                        heroicons-solid:trash
-                      </FuseSvgIcon>
+                      <FuseSvgIcon className="text-white">heroicons-solid:trash</FuseSvgIcon>
                     </IconButton>
                   </div>
                 </div>
@@ -363,12 +331,12 @@ const EditModal = ({
                     backgroundColor: 'background.default',
                     color: 'text.secondary',
                   }}
-                  className='object-cover w-full h-full text-64 font-bold'
+                  className="object-cover w-full h-full text-64 font-bold"
                   src={
                     previewSource ||
                     'https://monstar-lab.com/global/wp-content/uploads/sites/11/2019/04/male-placeholder-image.jpeg'
                   }
-                  alt='company logo'
+                  alt="company logo"
                 >
                   Freelancer Name
                 </Avatar>
@@ -376,28 +344,26 @@ const EditModal = ({
             )}
           />
         </div>
-        <div className='relative flex flex-col flex-auto items-center px-24 sm:px-48'>
+        <div className="relative flex flex-col flex-auto items-center px-24 sm:px-48">
           <Controller
             control={control}
-            name='name'
+            name="name"
             render={({ field }) => (
               <TextField
-                className='mt-32'
+                className="mt-32"
                 {...field}
-                label='Name'
-                placeholder='Name'
-                id='name'
+                label="Name"
+                placeholder="Name"
+                id="name"
                 error={!!errors.name}
                 helperText={errors?.name?.message}
-                variant='outlined'
+                variant="outlined"
                 required
                 fullWidth
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position='start'>
-                      <FuseSvgIcon size={20}>
-                        heroicons-solid:user-circle
-                      </FuseSvgIcon>
+                    <InputAdornment position="start">
+                      <FuseSvgIcon size={20}>heroicons-solid:user-circle</FuseSvgIcon>
                     </InputAdornment>
                   ),
                 }}
@@ -407,87 +373,79 @@ const EditModal = ({
 
           <Controller
             control={control}
-            name='email'
+            name="email"
             render={({ field }) => {
               if (!freelancer) {
                 return (
                   <TextField
-                    className='mt-32'
+                    className="mt-32"
                     {...field}
-                    label='Email'
-                    placeholder='email'
-                    id='email'
-                    variant='outlined'
+                    label="Email"
+                    placeholder="email"
+                    id="email"
+                    variant="outlined"
                     required
                     fullWidth
                     error={!!errors.email}
                     helperText={errors?.email?.message}
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position='start'>
-                          <FuseSvgIcon size={20}>
-                            heroicons-solid:at-symbol
-                          </FuseSvgIcon>
+                        <InputAdornment position="start">
+                          <FuseSvgIcon size={20}>heroicons-solid:at-symbol</FuseSvgIcon>
                         </InputAdornment>
                       ),
                     }}
                   />
                 );
-              } else {
-                return <p></p>;
               }
+              return <p />;
             }}
           />
           <Controller
-            name='password'
+            name="password"
             control={control}
             render={({ field }) => {
               if (!freelancer) {
                 return (
                   <TextField
                     {...field}
-                    className='mt-32'
-                    label='Password'
-                    type='password'
+                    className="mt-32"
+                    label="Password"
+                    type="password"
                     error={!!errors.password}
                     helperText={errors?.password?.message}
-                    variant='outlined'
+                    variant="outlined"
                     required
                     fullWidth
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position='start'>
-                          <FuseSvgIcon size={20}>
-                            heroicons-solid:lock-closed
-                          </FuseSvgIcon>
+                        <InputAdornment position="start">
+                          <FuseSvgIcon size={20}>heroicons-solid:lock-closed</FuseSvgIcon>
                         </InputAdornment>
                       ),
                     }}
                   />
                 );
-              } else {
-                return <p></p>;
               }
+              return <p />;
             }}
           />
           <Controller
-            name='category'
+            name="category"
             control={control}
             render={({ field }) => (
               <TextField
                 {...field}
-                className='mt-32'
-                label='category'
-                type='text'
-                variant='outlined'
+                className="mt-32"
+                label="category"
+                type="text"
+                variant="outlined"
                 required
                 fullWidth
                 InputProps={{
                   startAdornment: (
-                    <InputAdornment position='start'>
-                      <FuseSvgIcon size={20}>
-                        heroicons-solid:color-swatch
-                      </FuseSvgIcon>
+                    <InputAdornment position="start">
+                      <FuseSvgIcon size={20}>heroicons-solid:color-swatch</FuseSvgIcon>
                     </InputAdornment>
                   ),
                 }}
@@ -496,12 +454,12 @@ const EditModal = ({
           />
         </div>
         <Box
-          className='flex items-center mt-40 py-14 pr-16 pl-4 sm:pr-48 sm:pl-36 border-t'
+          className="flex items-center mt-40 py-14 pr-16 pl-4 sm:pr-48 sm:pl-36 border-t"
           sx={{ backgroundColor: 'background.default' }}
         >
           {freelancer !== null && (
             <Button
-              color='error'
+              color="error"
               onClick={() => {
                 handleFreelancerDelete(freelancer._id);
               }}
@@ -510,7 +468,7 @@ const EditModal = ({
             </Button>
           )}
           <Button
-            className='ml-auto'
+            className="ml-auto"
             onClick={() => {
               handleSideBar(false);
             }}
@@ -519,11 +477,11 @@ const EditModal = ({
           </Button>
 
           <Button
-            className='ml-8'
-            variant='contained'
-            color='secondary'
+            className="ml-8"
+            variant="contained"
+            color="secondary"
             disabled={_.isEmpty(dirtyFields) || !isValid}
-            type='submit'
+            type="submit"
           >
             {freelancer ? 'Edit' : 'Save'}
           </Button>

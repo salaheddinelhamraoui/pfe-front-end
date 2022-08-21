@@ -1,4 +1,3 @@
-import FusePageCarded from '@fuse/core/FusePageCarded';
 import withReducer from 'app/store/withReducer';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 
@@ -7,16 +6,13 @@ import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import ContactsSidebarContent from './ContactsSidebarContent';
+import { showMessage } from 'app/store/fuse/messageSlice';
+import axios from 'axios';
 import EditeModal from '../modal/EditeModal';
 
 import reducer from '../store';
 import ProductsHeader from './ProductsHeader';
 import ProductsTable from './ProductsTable';
-
-import { showMessage } from 'app/store/fuse/messageSlice';
-
-import axios from 'axios';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
   '& .FusePageSimple-header': {
@@ -31,6 +27,7 @@ function Products() {
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
   const [companies, setCompanies] = useState([]);
   const [selectedCompany, setSelectedCompany] = useState();
+  const [loadingState, setLoadingState] = useState(true);
 
   const dispatch = useDispatch();
 
@@ -51,12 +48,12 @@ function Products() {
       .get(`${process.env.REACT_APP_API_URL}/findAllUsers?role=company`)
       .then((response) => {
         setCompanies(response.data.result);
-        // setLoadingState(false);
+        setLoadingState(false);
       })
       .catch((error) => {
         console.log(error);
         dispatch(showMessage({ message: error.response.data.message }));
-        // setLoadingState(false);
+        setLoadingState(false);
       });
   };
 
@@ -77,6 +74,7 @@ function Products() {
           handleSideBar={handleSideBar}
           companies={companies}
           handleSelectedCompany={handleSelectedCompany}
+          loadingState={loadingState}
         />
       }
       ref={pageLayout}
