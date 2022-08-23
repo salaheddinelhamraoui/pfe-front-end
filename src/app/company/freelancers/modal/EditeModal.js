@@ -1,37 +1,30 @@
-import Button from "@mui/material/Button";
-import NavLinkAdapter from "@fuse/core/NavLinkAdapter";
-import { useParams } from "react-router-dom";
-import FuseLoading from "@fuse/core/FuseLoading";
-import _ from "@lodash";
-import * as yup from "yup";
-import { Controller, useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import Box from "@mui/system/Box";
-import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
-import Avatar from "@mui/material/Avatar";
-import TextField from "@mui/material/TextField";
-import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
-import Autocomplete from "@mui/material/Autocomplete/Autocomplete";
-import Checkbox from "@mui/material/Checkbox/Checkbox";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import Button from '@mui/material/Button';
+import { useParams } from 'react-router-dom';
+import _ from '@lodash';
+import * as yup from 'yup';
+import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup/dist/yup';
+import Box from '@mui/system/Box';
+import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
+import Avatar from '@mui/material/Avatar';
+import TextField from '@mui/material/TextField';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
 
 /**
  * Form Validation Schema
  */
 const schema = yup.object().shape({
-  name: yup.string().required("You must enter a name"),
+  name: yup.string().required('You must enter a name'),
 });
 
 const EditeModal = ({ handleSideBar }) => {
   const routeParams = useParams();
 
-  const { control, watch, reset, handleSubmit, formState, getValues } = useForm(
-    {
-      mode: "onChange",
-      resolver: yupResolver(schema),
-    }
-  );
+  const { control, watch, reset, handleSubmit, formState, getValues } = useForm({
+    mode: 'onChange',
+    resolver: yupResolver(schema),
+  });
 
   const { isValid, dirtyFields, errors } = formState;
 
@@ -50,7 +43,7 @@ const EditeModal = ({ handleSideBar }) => {
       <Box
         className="relative w-full h-160 sm:h-192 px-32 sm:px-48"
         sx={{
-          backgroundColor: "bg-black",
+          backgroundColor: 'bg-black',
         }}
       >
         <img
@@ -61,7 +54,7 @@ const EditeModal = ({ handleSideBar }) => {
       </Box>
       <IconButton
         className="absolute top-0 right-0 my-16 mx-32 z-10"
-        sx={{ color: "white" }}
+        sx={{ color: 'white' }}
         size="large"
         onClick={() => {
           handleSideBar(false);
@@ -80,18 +73,15 @@ const EditeModal = ({ handleSideBar }) => {
                 <Box
                   sx={{
                     borderWidth: 4,
-                    borderStyle: "solid",
-                    borderColor: "background.paper",
+                    borderStyle: 'solid',
+                    borderColor: 'background.paper',
                   }}
                   className="relative flex items-center justify-center w-128 h-128 rounded-full overflow-hidden"
                 >
                   <div className="absolute inset-0 bg-black bg-opacity-50 z-10" />
                   <div className="absolute inset-0 flex items-center justify-center z-20">
                     <div>
-                      <label
-                        htmlFor="button-avatar"
-                        className="flex p-8 cursor-pointer"
-                      >
+                      <label htmlFor="button-avatar" className="flex p-8 cursor-pointer">
                         <input
                           accept="image/*"
                           className="hidden"
@@ -99,23 +89,19 @@ const EditeModal = ({ handleSideBar }) => {
                           type="file"
                           onChange={() => {}}
                         />
-                        <FuseSvgIcon className="text-white">
-                          heroicons-outline:camera
-                        </FuseSvgIcon>
+                        <FuseSvgIcon className="text-white">heroicons-outline:camera</FuseSvgIcon>
                       </label>
                     </div>
                     <div>
                       <IconButton onClick={() => {}}>
-                        <FuseSvgIcon className="text-white">
-                          heroicons-solid:trash
-                        </FuseSvgIcon>
+                        <FuseSvgIcon className="text-white">heroicons-solid:trash</FuseSvgIcon>
                       </IconButton>
                     </div>
                   </div>
                   <Avatar
                     sx={{
-                      backgroundColor: "background.default",
-                      color: "text.secondary",
+                      backgroundColor: 'background.default',
+                      color: 'text.secondary',
                     }}
                     className="object-cover w-full h-full text-64 font-bold"
                     src="/assets/images/apps/ecommerce/fall-glow.jpg"
@@ -147,9 +133,7 @@ const EditeModal = ({ handleSideBar }) => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <FuseSvgIcon size={20}>
-                      heroicons-solid:user-circle
-                    </FuseSvgIcon>
+                    <FuseSvgIcon size={20}>heroicons-solid:user-circle</FuseSvgIcon>
                   </InputAdornment>
                 ),
               }}
@@ -174,9 +158,7 @@ const EditeModal = ({ handleSideBar }) => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <FuseSvgIcon size={20}>
-                      heroicons-solid:office-building
-                    </FuseSvgIcon>
+                    <FuseSvgIcon size={20}>heroicons-solid:office-building</FuseSvgIcon>
                   </InputAdornment>
                 ),
               }}
@@ -201,9 +183,7 @@ const EditeModal = ({ handleSideBar }) => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <FuseSvgIcon size={20}>
-                      heroicons-solid:location-marker
-                    </FuseSvgIcon>
+                    <FuseSvgIcon size={20}>heroicons-solid:location-marker</FuseSvgIcon>
                   </InputAdornment>
                 ),
               }}
@@ -214,9 +194,9 @@ const EditeModal = ({ handleSideBar }) => {
 
       <Box
         className="flex items-center mt-40 py-14 pr-16 pl-4 sm:pr-48 sm:pl-36 border-t"
-        sx={{ backgroundColor: "background.default" }}
+        sx={{ backgroundColor: 'background.default' }}
       >
-        {routeParams.id !== "new" && (
+        {routeParams.id !== 'new' && (
           <Button color="error" onClick={() => {}}>
             Delete
           </Button>

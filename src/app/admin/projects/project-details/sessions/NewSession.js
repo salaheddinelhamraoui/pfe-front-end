@@ -1,5 +1,5 @@
 import Paper from '@mui/material/Paper';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
@@ -8,17 +8,36 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import _ from '@lodash';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import * as yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from 'app/store/userSlice';
+import axios from 'axios';
+import { showMessage } from 'app/store/fuse/messageSlice';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const schema = yup.object().shape({
   title: yup.string().required('You must enter a title'),
 });
 
 const NewSession = () => {
+  const defaultValues = {
+    date: new Date(),
+    title: '',
+    desc: '',
+  };
+
   const { reset, formState, watch, control, getValues } = useForm({
     mode: 'onChange',
+    defaultValues,
     resolver: yupResolver(schema),
   });
+
+  const navigate = useNavigate();
+
+  const user = useSelector(selectUser);
+
+  const { id } = useParams();
+
+  const [loadingState, setLoadingState] = useState(false);
 
   const dispatch = useDispatch();
 
@@ -26,15 +45,39 @@ const NewSession = () => {
 
   const { isValid, dirtyFields, errors } = formState;
 
-  const start = watch('start');
-  const end = watch('end');
-  const id = watch('id');
+  const date = watch('date');
+  const title = watch('title');
+  const description = watch('desc');
 
   /**
    * Form Submit
    */
   function onSubmit(ev) {
     ev.preventDefault();
+    setLoadingState(true);
+    axios
+      .post(`${process.env.REACT_APP_API_URL}/addSession`, {
+        creator_id: user._id,
+        project_id: id,
+        title,
+        description,
+        date,
+      })
+      .then(() => {
+        dispatch(showMessage({ message: 'Session added successfully' }));
+        setLoadingState(false);
+        reset({
+          start: null,
+          title: '',
+          description: '',
+        });
+        navigate('/calendar-admin');
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(showMessage({ message: 'Failed to add the session' }));
+        setLoadingState(false);
+      });
   }
   return (
     <div className="w-full px-24 w-full mt-20">
@@ -74,33 +117,17 @@ const NewSession = () => {
             <div className="w-full">
               <div className="flex flex-column sm:flex-row w-full items-center space-x-16">
                 <Controller
-                  name="start"
+                  name="date"
                   control={control}
                   render={({ field: { onChange, value } }) => (
                     <DateTimePicker
                       value={value}
                       onChange={onChange}
                       renderInput={(_props) => (
-                        <TextField label="Start" className="mt-8 mb-16 w-full" {..._props} />
+                        <TextField label="Date" className="mt-8 mb-16 w-full" {..._props} />
                       )}
                       className="mt-8 mb-16 w-full"
-                      maxDate={end}
-                    />
-                  )}
-                />
-
-                <Controller
-                  name="end"
-                  control={control}
-                  defaultValue=""
-                  render={({ field: { onChange, value } }) => (
-                    <DateTimePicker
-                      value={value}
-                      onChange={onChange}
-                      renderInput={(_props) => (
-                        <TextField label="End" className="mt-8 mb-16 w-full" {..._props} />
-                      )}
-                      minDate={start}
+                      // maxDate={end}
                     />
                   )}
                 />
@@ -113,7 +140,7 @@ const NewSession = () => {
             </FuseSvgIcon>
 
             <Controller
-              name="extendedProps.desc"
+              name="desc"
               control={control}
               render={({ field }) => (
                 <TextField
@@ -137,7 +164,7 @@ const NewSession = () => {
               variant="contained"
               color="primary"
               onClick={onSubmit}
-              disabled={_.isEmpty(dirtyFields) || !isValid}
+              disabled={_.isEmpty(dirtyFields) || !isValid || loadingState}
             >
               Save
             </Button>
