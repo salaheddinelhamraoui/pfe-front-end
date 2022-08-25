@@ -1,14 +1,15 @@
 import FusePageSimple from '@fuse/core/FusePageSimple';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 import ProjectDashboardAppHeader from './ProjectDashboardAppHeader';
 import TimeLine from './tabs/TimeLine';
 import NewSession from './sessions/NewSession';
 import Informations from './tabs/Informations';
-import UpdateProject from './tabs/UpdateProject';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
   '& .FusePageSimple-header': {
@@ -19,14 +20,27 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 
 function ProjectDetails(props) {
   const [tabValue, setTabValue] = useState(0);
+  const [projectData, setProjectData] = useState({});
+  const { id } = useParams();
 
   function handleChangeTab(event, value) {
     setTabValue(value);
   }
 
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/findProject/${id}`)
+      .then((res) => {
+        setProjectData(res.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
   return (
     <Root
-      header={<ProjectDashboardAppHeader />}
+      header={<ProjectDashboardAppHeader projectData={projectData} />}
       content={
         <div className="w-full p-12 pt-16 sm:pt-24 lg:ltr:pr-0 lg:rtl:pl-0">
           <Tabs
@@ -66,7 +80,7 @@ function ProjectDetails(props) {
             />
           </Tabs>
           {tabValue === 0 && <TimeLine />}
-          {tabValue === 1 && <Informations />}
+          {tabValue === 1 && <Informations projectData={projectData} />}
           {tabValue === 2 && <NewSession />}
         </div>
       }

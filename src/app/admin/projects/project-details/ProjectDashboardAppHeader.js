@@ -10,34 +10,13 @@ function ProjectDashboardAppHeader(props) {
     menuEl: null,
   });
 
-  function handleChangeProject(id) {
-    setSelectedProject({
-      id,
-      menuEl: null,
-    });
-  }
-
-  function handleOpenProjectMenu(event) {
-    setSelectedProject({
-      id: selectedProject.id,
-      menuEl: event.currentTarget,
-    });
-  }
-
-  function handleCloseProjectMenu() {
-    setSelectedProject({
-      id: selectedProject.id,
-      menuEl: null,
-    });
-  }
-
   return (
     <div className="flex flex-col w-full px-24 sm:px-32">
       <div className="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-32 sm:my-48">
         <div className="flex flex-auto items-center min-w-0">
           <div className="flex flex-col min-w-0 mx-16">
             <Typography className="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">
-              Project Title
+              {props.projectData.project_name}
             </Typography>
 
             <div className="flex items-center">
@@ -63,14 +42,6 @@ function ProjectDashboardAppHeader(props) {
             }
           >
             Delete
-          </Button>
-          <Button
-            className="whitespace-nowrap"
-            variant="contained"
-            color="secondary"
-            startIcon={<FuseSvgIcon size={20}>heroicons-solid:cog</FuseSvgIcon>}
-          >
-            Update
           </Button>
         </div>
       </div>

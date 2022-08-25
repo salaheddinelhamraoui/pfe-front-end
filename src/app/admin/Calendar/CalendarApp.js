@@ -125,33 +125,11 @@ function CalendarApp(props) {
   };
 
   function renderEventContent(eventInfo) {
-    const labelId = eventInfo.event.extendedProps.label;
-    const label = _.find(
-      [
-        {
-          id: '0',
-          title: 'Project 1',
-          color: '#419388',
-        },
-        {
-          id: '1',
-          title: 'Project 2',
-          color: '#4151B0',
-        },
-        {
-          id: '2',
-          title: 'Project 3',
-          color: '#D63E63',
-        },
-      ],
-      { id: labelId }
-    );
-
     return (
       <Box
         sx={{
-          backgroundColor: label?.color,
-          color: label && theme.palette.getContrastText(label?.color),
+          backgroundColor: '#4151B0',
+          color: '#4151B0',
         }}
         className={clsx('flex items-center w-full rounded-4 px-8 py-2 h-22 text-white')}
       >
@@ -191,14 +169,9 @@ function CalendarApp(props) {
               events={[
                 {
                   _id: '0',
-                  title: 'Session Title',
-                  allDay: false,
+                  title: 'Session Title Session Title',
                   start: '2022-08-06T00:00:00+03:00',
                   end: '2022-08-06T00:00:00+06:00',
-                  extendedProps: {
-                    desc: 'Session description',
-                    label: '0',
-                  },
                 },
               ]}
               eventContent={renderEventContent}
