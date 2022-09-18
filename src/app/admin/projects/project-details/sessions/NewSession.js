@@ -21,6 +21,7 @@ const schema = yup.object().shape({
 const NewSession = () => {
   const defaultValues = {
     date: new Date(),
+    endDate: '',
     title: '',
     desc: '',
   };
@@ -48,6 +49,7 @@ const NewSession = () => {
   const date = watch('date');
   const title = watch('title');
   const description = watch('desc');
+  const endDate = watch('endDate');
 
   /**
    * Form Submit
@@ -55,6 +57,7 @@ const NewSession = () => {
   function onSubmit(ev) {
     ev.preventDefault();
     setLoadingState(true);
+    console.log(endDate);
     axios
       .post(`${process.env.REACT_APP_API_URL}/addSession`, {
         creator_id: user._id,
@@ -62,6 +65,7 @@ const NewSession = () => {
         title,
         description,
         date,
+        end_date: endDate,
       })
       .then(() => {
         dispatch(showMessage({ message: 'Session added successfully' }));
@@ -128,6 +132,32 @@ const NewSession = () => {
                       )}
                       className="mt-8 mb-16 w-full"
                       // maxDate={end}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex sm:space-x-24 mb-16">
+            <FuseSvgIcon className="hidden sm:inline-flex mt-16" color="action">
+              heroicons-outline:calendar
+            </FuseSvgIcon>
+            <div className="w-full">
+              <div className="flex flex-column sm:flex-row w-full items-center space-x-16">
+                <Controller
+                  name="endDate"
+                  control={control}
+                  render={({ field: { onChange, value } }) => (
+                    <DateTimePicker
+                      value={value}
+                      onChange={onChange}
+                      renderInput={(_props) => (
+                        <TextField label="endDate" className="mt-8 mb-16 w-full" {..._props} />
+                      )}
+                      className="mt-8 mb-16 w-full"
+                      // maxDate={end}
+                      minDate={date}
+                      maxDate={new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1)}
                     />
                   )}
                 />

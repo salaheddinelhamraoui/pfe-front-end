@@ -1,23 +1,19 @@
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Typography from '@mui/material/Typography';
 import withReducer from 'app/store/withReducer';
 import { useEffect, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin from '@fullcalendar/interaction';
 import FusePageSimple from '@fuse/core/FusePageSimple';
-import _ from '@lodash';
 import clsx from 'clsx';
 import { Box } from '@mui/system';
 import useThemeMediaQuery from '@fuse/hooks/useThemeMediaQuery';
 import CalendarHeader from './CalendarHeader';
-import EventDialog from './dialogs/event/EventDialog';
 import reducer from './store';
-import { openNewEventDialog, selectFilteredEvents } from './store/eventsSlice';
-import { selectLabels } from './store/labelsSlice';
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
   '& a': {
@@ -94,17 +90,21 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 function CalendarApp(props) {
   const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState();
-  const dispatch = useDispatch();
-  const events = useSelector(selectFilteredEvents);
   const calendarRef = useRef();
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down('lg'));
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
-  const theme = useTheme();
-  const labels = useSelector(selectLabels);
+  const [events, setEvents] = useState();
 
   useEffect(() => {
     setLeftSidebarOpen(!isMobile);
   }, [isMobile]);
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/findAllSessions`)
+      .then((res) => setEvents(res.data.result))
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     // Correct calendar dimentions after sidebar toggles
@@ -115,13 +115,10 @@ function CalendarApp(props) {
 
   const handleDateSelect = (selectInfo) => {
     const { start, end } = selectInfo;
-    dispatch(openNewEventDialog(selectInfo));
   };
 
   const handleEventClick = (clickInfo) => {
-    // dispatch(openEditEventDialog(clickInfo));
-    console.log(clickInfo.event);
-    navigate(`/project-details/${clickInfo.event._id}`);
+    navigate(`/project-details/${clickInfo.event._def.extendedProps.project_id}`);
   };
 
   function renderEventContent(eventInfo) {
@@ -133,8 +130,10 @@ function CalendarApp(props) {
         }}
         className={clsx('flex items-center w-full rounded-4 px-8 py-2 h-22 text-white')}
       >
-        <Typography className="text-12 font-semibold">{eventInfo.timeText}</Typography>
-        <Typography className="text-12 px-4 truncate">{eventInfo.event.title}</Typography>
+        <Typography className="text-12 font-semibold">{eventInfo.event._def.title}</Typography>
+        <Typography className="text-12 px-4 truncate">
+          {eventInfo.event._def.extendedProps.description}
+        </Typography>
       </Box>
     );
   }
@@ -155,6 +154,7 @@ function CalendarApp(props) {
         header={<CalendarHeader calendarRef={calendarRef} currentDate={currentDate} />}
         content={
           <>
+            {console.log(events)}
             <FullCalendar
               plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
               headerToolbar={false}
@@ -166,14 +166,7 @@ function CalendarApp(props) {
               weekends
               datesSet={handleDates}
               select={handleDateSelect}
-              events={[
-                {
-                  _id: '0',
-                  title: 'Session Title Session Title',
-                  start: '2022-08-06T00:00:00+03:00',
-                  end: '2022-08-06T00:00:00+06:00',
-                },
-              ]}
+              events={events && events}
               eventContent={renderEventContent}
               eventClick={handleEventClick}
               eventAdd={handleEventAdd}
