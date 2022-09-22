@@ -1,33 +1,33 @@
-import { useState, useEffect } from 'react';
-import Paper from '@mui/material/Paper';
-import Timeline from '@mui/lab/Timeline';
-import TimelineItem from '@mui/lab/TimelineItem';
-import TimelineSeparator from '@mui/lab/TimelineSeparator';
-import TimelineConnector from '@mui/lab/TimelineConnector';
-import TimelineContent from '@mui/lab/TimelineContent';
-import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
-import TimelineDot from '@mui/lab/TimelineDot';
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import FuseLoading from '@fuse/core/FuseLoading';
-import { CardActionArea } from '@mui/material';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import axios from 'axios';
-import { useParams } from 'react-router-dom';
-import Moment from 'react-moment';
-import Box from '@mui/material/Box';
-import Modal from '@mui/material/Modal';
-import UpdateSession from '../sessions/UpdateSession';
+import { useState, useEffect } from "react";
+import Paper from "@mui/material/Paper";
+import Timeline from "@mui/lab/Timeline";
+import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
+import TimelineDot from "@mui/lab/TimelineDot";
+import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import FuseLoading from "@fuse/core/FuseLoading";
+import { CardActionArea } from "@mui/material";
+import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import Moment from "react-moment";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+import UpdateSession from "../sessions/UpdateSession";
 
 const style = {
-  position: 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
   width: 600,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
+  bgcolor: "background.paper",
+  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
@@ -88,23 +88,26 @@ const TimeLine = () => {
             data.map((item, index) => (
               <TimelineItem key={item._id}>
                 <TimelineOppositeContent
-                  sx={{ m: 'auto 0' }}
+                  sx={{ m: "auto 0" }}
                   align="right"
                   variant="body2"
                   color="text.secondary"
                 >
-                  <Moment format="YYYY/MM/DD hh:mm">{item.date}</Moment> -{' '}
+                  <Moment format="YYYY/MM/DD hh:mm">{item.date}</Moment> -{" "}
                   <Moment format="YYYY/MM/DD hh:mm">{item.end_date}</Moment>
                 </TimelineOppositeContent>
                 <TimelineSeparator>
                   <TimelineConnector />
-                  <TimelineDot color="primary" sx={{ py: '7px', px: '12px' }}>
+                  <TimelineDot color="primary" sx={{ py: "7px", px: "12px" }}>
                     {index + 1}
                   </TimelineDot>
                   <TimelineConnector />
                 </TimelineSeparator>
-                <TimelineContent sx={{ py: '12px', px: 2 }}>
-                  <Card sx={{ maxWidth: 345 }} className={`${index % 2 !== 0 && 'ml-auto'}`}>
+                <TimelineContent sx={{ py: "12px", px: 2 }}>
+                  <Card
+                    sx={{ maxWidth: 345 }}
+                    className={`${index % 2 !== 0 && "ml-auto"}`}
+                  >
                     <CardActionArea className="cursor-default">
                       <CardContent>
                         <div className="flex">
@@ -127,8 +130,12 @@ const TimeLine = () => {
                         <Typography variant="body2" color="text.secondary">
                           {item.description}
                         </Typography>
-                        <Typography variant="body2" color="text.secondary" className="mt-12">
-                          State :{' '}
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          className="mt-12"
+                        >
+                          State :{" "}
                           <span className="inline text-12 font-semibold py-4 px-8 rounded-full truncate bg-green-500 text-white">
                             Signed
                           </span>
