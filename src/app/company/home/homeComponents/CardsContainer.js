@@ -1,15 +1,41 @@
+import { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
 import { Link } from 'react-router-dom';
-
+import Moment from 'react-moment';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/store/userSlice';
+import axios from 'axios';
 
 const CardsContainer = () => {
   const user = useSelector(selectUser);
+  const [data, setData] = useState();
+  const [projects, setProjects] = useState();
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/findSessionByUserIdToday/${user._id}`)
+      .then((res) => {
+        setData(res.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/findProjectByCompanyId/${user._id}`)
+      .then((res) => {
+        setProjects(res.data.result);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
+
+  console.log(data);
   return (
     <div className="w-full">
       <div className="w-full grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-16 mb-16 pt-16 sm:pt-24 lg:ltr:pr-0 lg:rtl:pl-0">
@@ -60,78 +86,36 @@ const CardsContainer = () => {
               className="px-16 mb-12 text-lg font-medium tracking-tight leading-6 truncate"
               color="text.secondary"
             >
-              Passed Sessions
+              Today Sessions
             </Typography>
           </div>
-          <div className="flex border rounded-lg  px-12 py-8 mx-12 mb-8">
-            <div className="flex items-center justify-center">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4">
-                Session XT with the Freelancer X
-              </Typography>
-            </div>
-            <div className="ml-auto">
-              <Button
-                to="/validate-session-company"
-                component={Link}
-                className="px-12 min-w-128"
-                color="error"
-                variant="contained"
-                endIcon={
-                  <FuseSvgIcon className="" size={20}>
-                    heroicons-solid:arrow-sm-right
-                  </FuseSvgIcon>
-                }
-              >
-                Sign
-              </Button>
-            </div>
-          </div>
-          <div className="flex border rounded-lg  px-12 py-8 mx-12  mb-8">
-            <div className="flex items-center justify-center">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4">
-                Session XT with the Freelancer X
-              </Typography>
-            </div>
-            <div className="ml-auto">
-              <Button
-                to="/validate-session-company"
-                component={Link}
-                className="px-12 min-w-128"
-                color="error"
-                variant="contained"
-                endIcon={
-                  <FuseSvgIcon className="" size={20}>
-                    heroicons-solid:arrow-sm-right
-                  </FuseSvgIcon>
-                }
-              >
-                Sign
-              </Button>
-            </div>
-          </div>
-          <div className="flex border rounded-lg  px-12 py-8 mx-12 mb-8">
-            <div className="flex items-center justify-center">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4">
-                Session XT with the Freelancer X
-              </Typography>
-            </div>
-            <div className="ml-auto">
-              <Button
-                to="/validate-session-company"
-                component={Link}
-                className="px-12 min-w-128"
-                color="error"
-                variant="contained"
-                endIcon={
-                  <FuseSvgIcon className="" size={20}>
-                    heroicons-solid:arrow-sm-right
-                  </FuseSvgIcon>
-                }
-              >
-                Sign
-              </Button>
-            </div>
-          </div>
+          {data &&
+            data.map((session) => (
+              <div className="flex border rounded-lg  px-12 py-8 mx-12 mb-8" key={session._id}>
+                <div className="flex items-center justify-center">
+                  <Typography className="text-base font-medium  dark:text-blue-500 mt-4">
+                    {session.title}
+                  </Typography>
+                </div>
+                <div className="ml-auto">
+                  <Button
+                    to="/validate-session-company"
+                    component={Link}
+                    className="px-12 min-w-128"
+                    color="error"
+                    variant="contained"
+                    endIcon={
+                      <FuseSvgIcon className="" size={20}>
+                        heroicons-solid:arrow-sm-right
+                      </FuseSvgIcon>
+                    }
+                  >
+                    Sign
+                  </Button>
+                </div>
+              </div>
+            ))}
+          {data && data.length === 0 && <p className="text-center">No Sessions Found !!</p>}
         </Paper>
       </div>
       <div className="w-full">
@@ -152,7 +136,7 @@ const CardsContainer = () => {
             </div>
             <div className="flex items-center justify-center ml-12">
               <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                Freelancer
+                Company
               </Typography>
             </div>
             <div className="flex items-center justify-center ml-12">
@@ -162,105 +146,43 @@ const CardsContainer = () => {
             </div>
             <div className="ml-auto" />
           </div>
-          <div className="grid grid-cols-4  border rounded-lg  px-12 py-8 mx-12 mb-8">
-            <div className="flex items-center justify-center">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                Project Name 1
-              </Typography>
-            </div>
-            <div className="flex items-center justify-center ml-12">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                Freelancer Name 1
-              </Typography>
-            </div>
-            <div className="flex items-center justify-center ml-12">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                22/8/2022
-              </Typography>
-            </div>
-            <div className="ml-auto">
-              <Button
-                to="/"
-                component={Link}
-                className="px-12 min-w-128"
-                color="secondary"
-                variant="contained"
-                endIcon={
-                  <FuseSvgIcon className="" size={20}>
-                    heroicons-solid:arrow-sm-right
-                  </FuseSvgIcon>
-                }
-              >
-                More Informations
-              </Button>
-            </div>
-          </div>
-          <div className="grid grid-cols-4  border rounded-lg  px-12 py-8 mx-12 mb-8">
-            <div className="flex items-center justify-center">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                Project Name 2
-              </Typography>
-            </div>
-            <div className="flex items-center justify-center ml-12">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                Freelancer Name 2
-              </Typography>
-            </div>
-            <div className="flex items-center justify-center ml-12">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                22/8/2022
-              </Typography>
-            </div>
-            <div className="ml-auto">
-              <Button
-                to="/"
-                component={Link}
-                className="px-12 min-w-128"
-                color="secondary"
-                variant="contained"
-                endIcon={
-                  <FuseSvgIcon className="" size={20}>
-                    heroicons-solid:arrow-sm-right
-                  </FuseSvgIcon>
-                }
-              >
-                More Informations
-              </Button>
-            </div>
-          </div>
-          <div className="grid grid-cols-4  border rounded-lg  px-12 py-8 mx-12 mb-8">
-            <div className="flex items-center justify-center">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                Project Name 3
-              </Typography>
-            </div>
-            <div className="flex items-center justify-center ml-12">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                Freelancer Name 3
-              </Typography>
-            </div>
-            <div className="flex items-center justify-center ml-12">
-              <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
-                22/8/2022
-              </Typography>
-            </div>
-            <div className="ml-auto">
-              <Button
-                to="/"
-                component={Link}
-                className="px-12 min-w-128"
-                color="secondary"
-                variant="contained"
-                endIcon={
-                  <FuseSvgIcon className="" size={20}>
-                    heroicons-solid:arrow-sm-right
-                  </FuseSvgIcon>
-                }
-              >
-                More Informations
-              </Button>
-            </div>
-          </div>
+          {projects &&
+            projects.length > 0 &&
+            projects.map((project) => (
+              <div className="grid grid-cols-4  border rounded-lg  px-12 py-8 mx-12 mb-8">
+                <div className="flex items-center justify-center" key={project._id}>
+                  <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
+                    {project.project_name}
+                  </Typography>
+                </div>
+                <div className="flex items-center justify-center ml-12">
+                  <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
+                    {project.freelancer_id.data.displayName}
+                  </Typography>
+                </div>
+                <div className="flex items-center justify-center ml-12">
+                  <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
+                    <Moment format="YYYY/MM/DD">{project.start_date}</Moment>
+                  </Typography>
+                </div>
+                <div className="ml-auto">
+                  <Button
+                    to="/"
+                    component={Link}
+                    className="px-12 min-w-128"
+                    color="secondary"
+                    variant="contained"
+                    endIcon={
+                      <FuseSvgIcon className="" size={20}>
+                        heroicons-solid:arrow-sm-right
+                      </FuseSvgIcon>
+                    }
+                  >
+                    More Informations
+                  </Button>
+                </div>
+              </div>
+            ))}
         </Paper>
       </div>
     </div>

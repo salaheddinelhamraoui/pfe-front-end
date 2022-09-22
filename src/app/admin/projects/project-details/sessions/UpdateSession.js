@@ -11,6 +11,7 @@ import { selectUser } from 'app/store/userSlice';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import FuseLoading from '@fuse/core/FuseLoading';
+import { showMessage } from 'app/store/fuse/messageSlice';
 
 const schema = yup.object().shape({
   title: yup.string().required('You must enter a title'),
@@ -23,6 +24,7 @@ const UpdateSession = ({ selectedSessionId, handleSelectedSessionId, handleClose
     date: '',
     title: '',
     desc: '',
+    endDate: '',
   };
 
   const { reset, formState, watch, control, getValues } = useForm({
@@ -44,6 +46,7 @@ const UpdateSession = ({ selectedSessionId, handleSelectedSessionId, handleClose
   const date = watch('date');
   const title = watch('title');
   const description = watch('desc');
+  const endDate = watch('endDate');
 
   useEffect(() => {
     setLoadingState(true);
@@ -55,6 +58,7 @@ const UpdateSession = ({ selectedSessionId, handleSelectedSessionId, handleClose
             title: res.data.result.title,
             desc: res.data.result.description,
             date: res.data.result.date,
+            endDate: res.data.result.end_date,
           });
 
           setData(res.data.result);
@@ -72,38 +76,25 @@ const UpdateSession = ({ selectedSessionId, handleSelectedSessionId, handleClose
    */
 
   const onSubmit = () => {
-    console.log('hello');
-    console.log(data);
     console.log(selectedSessionId);
+    axios
+      .patch(`${process.env.REACT_APP_API_URL}/updateSession/${selectedSessionId}`, {
+        title,
+        description,
+        date,
+        endDate,
+      })
+      .then(() => {
+        dispatch(showMessage({ message: 'Session updated successfully' }));
+        setLoadingState(false);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(showMessage({ message: 'Failed to update the session' }));
+        setLoadingState(false);
+      });
   };
-
-  //   function onSubmit(ev) {
-  //     ev.preventDefault();
-  //     setLoadingState(true);
-  //     axios
-  //       .post(`${process.env.REACT_APP_API_URL}/addSession`, {
-  //         creator_id: user._id,
-  //         project_id: id,
-  //         title,
-  //         description,
-  //         date,
-  //       })
-  //       .then(() => {
-  //         dispatch(showMessage({ message: 'Session added successfully' }));
-  //         setLoadingState(false);
-  //         reset({
-  //           start: null,
-  //           title: '',
-  //           description: '',
-  //         });
-  //         navigate('/calendar-admin');
-  //       })
-  //       .catch((err) => {
-  //         console.log(err);
-  //         dispatch(showMessage({ message: 'Failed to add the session' }));
-  //         setLoadingState(false);
-  //       });
-  //   }
 
   if (loadingState) {
     return <FuseLoading />;
@@ -154,6 +145,30 @@ const UpdateSession = ({ selectedSessionId, handleSelectedSessionId, handleClose
                     onChange={onChange}
                     renderInput={(_props) => (
                       <TextField label="Date" className="mt-8 mb-16 w-full" {..._props} />
+                    )}
+                    className="mt-8 mb-16 w-full"
+                    // maxDate={end}
+                  />
+                )}
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex sm:space-x-24 mb-16">
+          <FuseSvgIcon className="hidden sm:inline-flex mt-16" color="action">
+            heroicons-outline:calendar
+          </FuseSvgIcon>
+          <div className="w-full">
+            <div className="flex flex-column sm:flex-row w-full items-center space-x-16">
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <DateTimePicker
+                    value={value}
+                    onChange={onChange}
+                    renderInput={(_props) => (
+                      <TextField label="endDate" className="mt-8 mb-16 w-full" {..._props} />
                     )}
                     className="mt-8 mb-16 w-full"
                     // maxDate={end}

@@ -21,6 +21,7 @@ const Informations = (props) => {
     desc: props.projectData.description,
   };
 
+  console.log(props.projectData.freelancer_id);
   const { reset, formState, watch, control, getValues } = useForm({
     mode: 'onChange',
     defaultValues,

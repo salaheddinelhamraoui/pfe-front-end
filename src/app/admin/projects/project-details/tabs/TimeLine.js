@@ -38,6 +38,7 @@ const TimeLine = () => {
   const { id } = useParams();
   const [open, setOpen] = useState(false);
   const [selectedSessionId, setSelectedSessionId] = useState();
+  const [sessionsTime, setSessionsTime] = useState();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -47,7 +48,16 @@ const TimeLine = () => {
       .get(`${process.env.REACT_APP_API_URL}/findSessionByProjectId/${id}`)
       .then((res) => {
         setData(res.data.result);
-        console.log(res);
+        setLoadingState(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoadingState(false);
+      });
+    axios
+      .get(`${process.env.REACT_APP_API_URL}/restHours/${id}`)
+      .then((res) => {
+        setSessionsTime(res.data);
         setLoadingState(false);
       })
       .catch((err) => {
@@ -62,11 +72,17 @@ const TimeLine = () => {
 
   return (
     <div className="w-full px-24 w-full mt-20">
-      <Paper className="shadow rounded-2xl overflow-hidden p-24">
+      <Paper className="relative shadow rounded-2xl overflow-hidden p-24">
         {loadingState && <FuseLoading />}
         {!loadingState && data && data.length === 0 && (
           <p className="text-center mt-8">No Sessions Found</p>
         )}
+        <div className="absolute top-16 left-16">
+          <p>Total Sessions Time : {sessionsTime && sessionsTime.totalSessionsTime.toFixed(2)}h</p>
+          <p className="mt-4">
+            Remaining Time: {sessionsTime && sessionsTime.consumedTime.toFixed(2)}h
+          </p>
+        </div>
         <Timeline position="alternate">
           {data &&
             data.map((item, index) => (
@@ -77,7 +93,8 @@ const TimeLine = () => {
                   variant="body2"
                   color="text.secondary"
                 >
-                  <Moment format="YYYY/MM/DD hh:mm:ss">{item.date}</Moment>
+                  <Moment format="YYYY/MM/DD hh:mm">{item.date}</Moment> -{' '}
+                  <Moment format="YYYY/MM/DD hh:mm">{item.end_date}</Moment>
                 </TimelineOppositeContent>
                 <TimelineSeparator>
                   <TimelineConnector />

@@ -1,14 +1,51 @@
 /* eslint-disable prettier/prettier */
+import { useState, forwardRef } from "react";
 import Typography from "@mui/material/Typography";
-import { useState } from "react";
 import Button from "@mui/material/Button";
 import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+
+import DialogTitle from "@mui/material/DialogTitle";
+import Slide from "@mui/material/Slide";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+
+const Transition = forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function ProjectDashboardAppHeader(props) {
+  const [open, setOpen] = useState(false);
+
+  const routeParams = useParams();
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
   const [selectedProject, setSelectedProject] = useState({
     id: 1,
     menuEl: null,
   });
+
+  const handleProjectDelete = () => {
+    console.log(routeParams.id);
+    axios
+      .delete(
+        `${process.env.REACT_APP_API_URL}/deleteProject/${routeParams.id}`
+      )
+      .then(() => {
+        window.location.href = "/projects";
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <div className="flex flex-col w-full px-24 sm:px-32">
@@ -40,10 +77,34 @@ function ProjectDashboardAppHeader(props) {
             startIcon={
               <FuseSvgIcon size={20}>heroicons-solid:trash</FuseSvgIcon>
             }
+            onClick={handleClickOpen}
           >
             Delete
           </Button>
         </div>
+        <Dialog
+          open={open}
+          TransitionComponent={Transition}
+          keepMounted
+          onClose={handleClose}
+          aria-describedby="alert-dialog-slide-description"
+        >
+          <DialogTitle>
+            Are you sure you want to delete this project?
+          </DialogTitle>
+
+          <DialogActions>
+            <Button
+              onClick={() => {
+                handleProjectDelete();
+                handleClose();
+              }}
+            >
+              Yes
+            </Button>
+            <Button onClick={handleClose}>No</Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </div>
   );
