@@ -122,22 +122,14 @@ const navigationConfig = [
     auth: authRoles.company,
     url: '/calendar-company',
   },
-  {
-    id: 'freelancers-company',
-    title: 'Freelacers',
-    type: 'item',
-    icon: 'heroicons-outline:user-group',
-    auth: authRoles.company,
-    url: '/freelancers-company',
-  },
-  {
-    id: 'documents-company',
-    title: 'Documents',
-    type: 'item',
-    icon: 'heroicons-outline:folder-open',
-    auth: authRoles.company,
-    url: '/documents-company',
-  },
+  // {
+  //   id: 'documents-company',
+  //   title: 'Documents',
+  //   type: 'item',
+  //   icon: 'heroicons-outline:folder-open',
+  //   auth: authRoles.company,
+  //   url: '/documents-company',
+  // },
 ];
 
 export default navigationConfig;
