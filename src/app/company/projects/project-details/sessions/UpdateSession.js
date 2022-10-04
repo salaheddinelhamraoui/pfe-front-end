@@ -1,69 +1,108 @@
-import {useState} from "react"
+import { useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import * as yup from 'yup';
-import _ from '@lodash';
-import { Popover } from '@mui/material';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import EventLabelSelect from '../../EventLabelSelect';
+import * as yup from 'yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from 'app/store/userSlice';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import FuseLoading from '@fuse/core/FuseLoading';
+import { showMessage } from 'app/store/fuse/messageSlice';
 
-/**
- * Form Validation Schema
- */
 const schema = yup.object().shape({
   title: yup.string().required('You must enter a title'),
 });
 
-function EventDialog(props) {
+const UpdateSession = ({ selectedSessionId, handleSelectedSessionId, handleClose }) => {
+  const [data, setData] = useState();
+
+  const defaultValues = {
+    date: '',
+    title: '',
+    desc: '',
+    endDate: '',
+  };
+
   const { reset, formState, watch, control, getValues } = useForm({
     mode: 'onChange',
+    defaultValues,
     resolver: yupResolver(schema),
   });
 
-  const [dialogState, setDialogState] = useState(true);
+  const navigate = useNavigate();
+
+  const user = useSelector(selectUser);
+
+  const [loadingState, setLoadingState] = useState(false);
+
+  const dispatch = useDispatch();
 
   const { isValid, dirtyFields, errors } = formState;
 
-  const start = watch('start');
-  const end = watch('end');
-  const id = watch('id');
+  const date = watch('date');
+  const title = watch('title');
+  const description = watch('desc');
+  const endDate = watch('endDate');
+
+  useEffect(() => {
+    setLoadingState(true);
+    if (selectedSessionId) {
+      axios
+        .get(`${process.env.REACT_APP_API_URL}/findSession/${selectedSessionId}`)
+        .then((res) => {
+          reset({
+            title: res.data.result.title,
+            desc: res.data.result.description,
+            date: res.data.result.date,
+            endDate: res.data.result.end_date,
+          });
+
+          setData(res.data.result);
+          setLoadingState(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setLoadingState(false);
+        });
+    }
+  }, [selectedSessionId]);
 
   /**
    * Form Submit
    */
-  function onSubmit(ev) {
-    ev.preventDefault();
+
+  const onSubmit = () => {
+    console.log(selectedSessionId);
+    axios
+      .patch(`${process.env.REACT_APP_API_URL}/updateSession/${selectedSessionId}`, {
+        title,
+        description,
+        date,
+        endDate,
+      })
+      .then(() => {
+        dispatch(showMessage({ message: 'Session updated successfully' }));
+        setLoadingState(false);
+        window.location.reload();
+      })
+      .catch((err) => {
+        console.log(err);
+        dispatch(showMessage({ message: 'Failed to update the session' }));
+        setLoadingState(false);
+      });
+  };
+
+  if (loadingState) {
+    return <FuseLoading />;
   }
 
-  /**
-   * Remove Event
-   */
-  function handleRemove() {}
-
   return (
-    <Popover
-      open={dialogState}
-      anchorReference="anchorPosition"
-      anchorOrigin={{
-        vertical: 'center',
-        horizontal: 'right',
-      }}
-      transformOrigin={{
-        vertical: 'center',
-        horizontal: 'left',
-      }}
-      anchorPosition={{
-        top: 350,
-        left: 150,
-      }}
-      // onClose={closeComposeDialog}
-      component="form"
-    >
-      <div className="flex flex-col max-w-full p-24 pt-32 sm:pt-40 sm:p-32 w-480">
+    <div className="w-full px-24 w-full mt-20">
+      <div className="mx-auto flex flex-col max-w-full p-24 pt-32 sm:pt-40 sm:p-32 w-480">
         <div className="flex sm:space-x-24 mb-16">
           <FuseSvgIcon className="hidden sm:inline-flex mt-16" color="action">
             heroicons-outline:pencil-alt
@@ -98,59 +137,54 @@ function EventDialog(props) {
           <div className="w-full">
             <div className="flex flex-column sm:flex-row w-full items-center space-x-16">
               <Controller
-                name="start"
+                name="date"
                 control={control}
                 render={({ field: { onChange, value } }) => (
                   <DateTimePicker
                     value={value}
                     onChange={onChange}
                     renderInput={(_props) => (
-                      <TextField label="Start" className="mt-8 mb-16 w-full" {..._props} />
+                      <TextField label="Date" className="mt-8 mb-16 w-full" {..._props} />
                     )}
                     className="mt-8 mb-16 w-full"
-                    maxDate={end}
-                  />
-                )}
-              />
-
-              <Controller
-                name="end"
-                control={control}
-                defaultValue=""
-                render={({ field: { onChange, value } }) => (
-                  <DateTimePicker
-                    value={value}
-                    onChange={onChange}
-                    renderInput={(_props) => (
-                      <TextField label="End" className="mt-8 mb-16 w-full" {..._props} />
-                    )}
-                    minDate={start}
+                    // maxDate={end}
                   />
                 )}
               />
             </div>
           </div>
         </div>
-
         <div className="flex sm:space-x-24 mb-16">
           <FuseSvgIcon className="hidden sm:inline-flex mt-16" color="action">
-            heroicons-outline:tag
+            heroicons-outline:calendar
           </FuseSvgIcon>
-
-          <Controller
-            name="extendedProps.label"
-            control={control}
-            render={({ field }) => <EventLabelSelect className="mt-8 mb-16" {...field} />}
-          />
+          <div className="w-full">
+            <div className="flex flex-column sm:flex-row w-full items-center space-x-16">
+              <Controller
+                name="endDate"
+                control={control}
+                render={({ field: { onChange, value } }) => (
+                  <DateTimePicker
+                    value={value}
+                    onChange={onChange}
+                    renderInput={(_props) => (
+                      <TextField label="endDate" className="mt-8 mb-16 w-full" {..._props} />
+                    )}
+                    className="mt-8 mb-16 w-full"
+                    // maxDate={end}
+                  />
+                )}
+              />
+            </div>
+          </div>
         </div>
-
         <div className="flex sm:space-x-24 mb-16">
           <FuseSvgIcon className="hidden sm:inline-flex mt-16" color="action">
             heroicons-outline:menu-alt-2
           </FuseSvgIcon>
 
           <Controller
-            name="extendedProps.desc"
+            name="desc"
             control={control}
             render={({ field }) => (
               <TextField
@@ -170,21 +204,13 @@ function EventDialog(props) {
 
         <div className="flex items-center space-x-8">
           <div className="flex flex-1" />
-          <IconButton onClick={handleRemove} size="large">
-            <FuseSvgIcon>heroicons-outline:trash</FuseSvgIcon>
-          </IconButton>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={onSubmit}
-            disabled={_.isEmpty(dirtyFields) || !isValid}
-          >
+          <Button variant="contained" color="primary" onClick={onSubmit} disabled={loadingState}>
             Save
           </Button>
         </div>
       </div>
-    </Popover>
+    </div>
   );
-}
+};
 
-export default EventDialog;
+export default UpdateSession;

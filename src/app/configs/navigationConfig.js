@@ -67,14 +67,6 @@ const navigationConfig = [
     url: '/calendar-admin',
   },
   {
-    id: 'documents-admin',
-    title: 'Documents',
-    type: 'item',
-    icon: 'heroicons-outline:folder-open',
-    auth: authRoles.admin,
-    url: '/documents-admin',
-  },
-  {
     id: 'home-freelancer',
     title: 'Home',
     type: 'item',
@@ -122,14 +114,14 @@ const navigationConfig = [
     auth: authRoles.company,
     url: '/calendar-company',
   },
-  // {
-  //   id: 'documents-company',
-  //   title: 'Documents',
-  //   type: 'item',
-  //   icon: 'heroicons-outline:folder-open',
-  //   auth: authRoles.company,
-  //   url: '/documents-company',
-  // },
+  {
+    id: 'company-projects',
+    title: 'Projects',
+    type: 'item',
+    icon: 'heroicons-outline:terminal',
+    auth: authRoles.company,
+    url: '/project-company',
+  },
 ];
 
 export default navigationConfig;

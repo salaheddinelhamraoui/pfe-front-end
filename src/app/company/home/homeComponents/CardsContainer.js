@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Moment from 'react-moment';
 import { useSelector } from 'react-redux';
 import { selectUser } from 'app/store/userSlice';
@@ -14,6 +14,7 @@ const CardsContainer = () => {
   const user = useSelector(selectUser);
   const [data, setData] = useState();
   const [projects, setProjects] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -99,7 +100,7 @@ const CardsContainer = () => {
                 </div>
                 <div className="ml-auto">
                   <Button
-                    to="/validate-session-company"
+                    to={`/validate-session-company?sessionId=${session._id}`}
                     component={Link}
                     className="px-12 min-w-128"
                     color="error"
@@ -167,7 +168,7 @@ const CardsContainer = () => {
                 </div>
                 <div className="ml-auto">
                   <Button
-                    to="/"
+                    to={`/project-details-company/${project._id}`}
                     component={Link}
                     className="px-12 min-w-128"
                     color="secondary"
