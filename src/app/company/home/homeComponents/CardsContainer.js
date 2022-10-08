@@ -1,14 +1,15 @@
-import { useState, useEffect } from 'react';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import { Link, useNavigate } from 'react-router-dom';
-import Moment from 'react-moment';
-import { useSelector } from 'react-redux';
-import { selectUser } from 'app/store/userSlice';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import { Link, useNavigate } from "react-router-dom";
+import Moment from "react-moment";
+import { useSelector } from "react-redux";
+import { selectUser } from "app/store/userSlice";
+import axios from "axios";
+import SignCard from "./SignCard";
 
 const CardsContainer = () => {
   const user = useSelector(selectUser);
@@ -18,7 +19,9 @@ const CardsContainer = () => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/findSessionByUserIdToday/${user._id}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/findSessionByUserIdToday/${user._id}`
+      )
       .then((res) => {
         setData(res.data.result);
       })
@@ -27,7 +30,9 @@ const CardsContainer = () => {
       });
 
     axios
-      .get(`${process.env.REACT_APP_API_URL}/findProjectByCompanyId/${user._id}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/findProjectByCompanyId/${user._id}`
+      )
       .then((res) => {
         setProjects(res.data.result);
       })
@@ -36,7 +41,6 @@ const CardsContainer = () => {
       });
   }, []);
 
-  console.log(data);
   return (
     <div className="w-full">
       <div className="w-full grid lg:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-16 mb-16 pt-16 sm:pt-24 lg:ltr:pr-0 lg:rtl:pl-0">
@@ -92,31 +96,11 @@ const CardsContainer = () => {
           </div>
           {data &&
             data.map((session) => (
-              <div className="flex border rounded-lg  px-12 py-8 mx-12 mb-8" key={session._id}>
-                <div className="flex items-center justify-center">
-                  <Typography className="text-base font-medium  dark:text-blue-500 mt-4">
-                    {session.title}
-                  </Typography>
-                </div>
-                <div className="ml-auto">
-                  <Button
-                    to={`/validate-session-company?sessionId=${session._id}`}
-                    component={Link}
-                    className="px-12 min-w-128"
-                    color="error"
-                    variant="contained"
-                    endIcon={
-                      <FuseSvgIcon className="" size={20}>
-                        heroicons-solid:arrow-sm-right
-                      </FuseSvgIcon>
-                    }
-                  >
-                    Sign
-                  </Button>
-                </div>
-              </div>
+              <SignCard key={session._id} session={session} />
             ))}
-          {data && data.length === 0 && <p className="text-center">No Sessions Found !!</p>}
+          {data && data.length === 0 && (
+            <p className="text-center">No Sessions Found !!</p>
+          )}
         </Paper>
       </div>
       <div className="w-full">
@@ -151,7 +135,10 @@ const CardsContainer = () => {
             projects.length > 0 &&
             projects.map((project) => (
               <div className="grid grid-cols-4  border rounded-lg  px-12 py-8 mx-12 mb-8">
-                <div className="flex items-center justify-center" key={project._id}>
+                <div
+                  className="flex items-center justify-center"
+                  key={project._id}
+                >
                   <Typography className="text-base font-medium  dark:text-blue-500 mt-4 mr-auto">
                     {project.project_name}
                   </Typography>

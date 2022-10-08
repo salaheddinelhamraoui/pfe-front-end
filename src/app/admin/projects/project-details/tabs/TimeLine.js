@@ -78,9 +78,13 @@ const TimeLine = () => {
           <p className="text-center mt-8">No Sessions Found</p>
         )}
         <div className="absolute top-16 left-16">
-          <p>Total Sessions Time : {sessionsTime && sessionsTime.totalSessionsTime.toFixed(2)}h</p>
+          <p>
+            Total Sessions Time :{" "}
+            {sessionsTime && sessionsTime.totalSessionsTime.toFixed(2)}h
+          </p>
           <p className="mt-4">
-            Remaining Time: {sessionsTime && sessionsTime.consumedTime.toFixed(2)}h
+            Remaining Time:{" "}
+            {sessionsTime && sessionsTime.consumedTime.toFixed(2)}h
           </p>
         </div>
         <Timeline position="alternate">
@@ -136,8 +140,16 @@ const TimeLine = () => {
                           className="mt-12"
                         >
                           State :{" "}
-                          <span className="inline text-12 font-semibold py-4 px-8 rounded-full truncate bg-green-500 text-white">
-                            Signed
+                          <span
+                            className={`inline text-12 font-semibold py-4 px-8 rounded-full truncate text-white ${
+                              item && item.state && item.state === "Pending"
+                                ? "bg-yellow-700"
+                                : item.state === "Signed By Company"
+                                ? "bg-blue-500"
+                                : "bg-green-500"
+                            }`}
+                          >
+                            {item && item?.state}
                           </span>
                         </Typography>
                       </CardContent>

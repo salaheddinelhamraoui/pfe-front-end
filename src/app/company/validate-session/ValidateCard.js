@@ -1,13 +1,13 @@
-import { useState, useRef, useEffect } from 'react';
-import SignatureCanvas from 'react-signature-canvas';
-import Button from '@mui/material/Button';
-import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import Typography from '@mui/material/Typography';
-import axios from 'axios';
-import { useSelector } from 'react-redux';
-import { selectUser } from 'app/store/userSlice';
-import Moment from 'react-moment';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useState, useRef, useEffect } from "react";
+import SignatureCanvas from "react-signature-canvas";
+import Button from "@mui/material/Button";
+import FuseSvgIcon from "@fuse/core/FuseSvgIcon";
+import Typography from "@mui/material/Typography";
+import axios from "axios";
+import { useSelector } from "react-redux";
+import { selectUser } from "app/store/userSlice";
+import Moment from "react-moment";
+import { Link, useSearchParams } from "react-router-dom";
 
 const ValidateCard = () => {
   const [imageURL, setImageURL] = useState(null);
@@ -15,7 +15,7 @@ const ValidateCard = () => {
   const [sessionData, setSessionData] = useState();
   const user = useSelector(selectUser);
   const [searchParams, setSearchParams] = useSearchParams();
-
+  const [preloader, setPreloader] = useState(false);
 
   useEffect(() => {
     axios
@@ -27,20 +27,69 @@ const ValidateCard = () => {
         console.log(err);
       });
     axios
-      .get(`${process.env.REACT_APP_API_URL}/findSession/${searchParams.get('sessionId')}`)
+      .get(
+        `${process.env.REACT_APP_API_URL}/findSession/${searchParams.get(
+          "sessionId"
+        )}`
+      )
       .then((res) => {
         setSessionData(res.data.result);
       })
       .catch((err) => {
         console.log(err);
       });
-  }, [searchParams.get('sessionId')]);
+  }, [searchParams.get("sessionId")]);
 
   const sigCanvas = useRef({});
 
   const clear = () => sigCanvas.current.clear();
 
-  const save = () => setImageURL(sigCanvas.current.getTrimmedCanvas().toDataURL('image/png'));
+  const save = () => {
+    setPreloader(true);
+    let bodyFormData = new FormData();
+
+    bodyFormData.append(
+      "document",
+      DataURIToBlob(
+        sigCanvas.current.getTrimmedCanvas().toDataURL("image/png")
+      ),
+      "image.png"
+    );
+
+    bodyFormData.append("sessionId", searchParams.get("sessionId"));
+
+    axios({
+      method: "post",
+      url: process.env.REACT_APP_API_URL + "/addSignatureCompany",
+      data: bodyFormData,
+      headers: { "Content-Type": "multipart/form-data" },
+    })
+      .then((res) => {
+        setSessionData(res.data.result);
+        setPreloader(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setPreloader(false);
+      });
+
+    clear();
+  };
+
+  function DataURIToBlob(dataURI) {
+    const splitDataURI = dataURI.split(",");
+    const byteString =
+      splitDataURI[0].indexOf("base64") >= 0
+        ? atob(splitDataURI[1])
+        : decodeURI(splitDataURI[1]);
+    const mimeString = splitDataURI[0].split(":")[1].split(";")[0];
+
+    const ia = new Uint8Array(byteString.length);
+    for (let i = 0; i < byteString.length; i++)
+      ia[i] = byteString.charCodeAt(i);
+
+    return new Blob([ia], { type: mimeString });
+  }
 
   return (
     <div className="flex flex-column w-full">
@@ -49,7 +98,12 @@ const ValidateCard = () => {
         <div className="mt-2">
           {sessions?.map((session, index) => (
             <div className="border-b mt-4 px-24 py-8 " key={index}>
-              <Link to={`/validate-session-company?sessionId=${session._id}`} className='custom-link'>{session.title}</Link>
+              <Link
+                to={`/validate-session-company?sessionId=${session._id}`}
+                className="custom-link"
+              >
+                {session.title}
+              </Link>
               <div>
                 <Moment format="YYYY/MM/DD hh:mm">{session.date}</Moment>
               </div>
@@ -71,15 +125,25 @@ const ValidateCard = () => {
         <Typography className="text-base text-left tracking-tight leading-none mt-4 mb-16">
           Date : <Moment format="YYYY/MM/DD hh:mm">{sessionData?.date}</Moment>
         </Typography>
-        <SignatureCanvas
-          penColor="black"
-          canvasProps={{
-            width: 500,
-            height: 200,
-            className: 'sigCanvas bg-white border rounded-lg',
-          }}
-          ref={sigCanvas}
-        />
+        {sessionData &&
+          sessionData.company_signature &&
+          sessionData.company_signature !== "" && (
+            <img src={sessionData?.company_signature}></img>
+          )}
+        {sessionData &&
+          !sessionData.company_signature &&
+          !sessionData.company_signature && (
+            <SignatureCanvas
+              penColor="black"
+              canvasProps={{
+                width: 500,
+                height: 200,
+                className: "sigCanvas bg-white border rounded-lg",
+              }}
+              ref={sigCanvas}
+            />
+          )}
+
         <div className="flex mt-12">
           <Button
             className="px-4 min-w-128 mr-12"
@@ -91,6 +155,10 @@ const ValidateCard = () => {
               </FuseSvgIcon>
             }
             onClick={save}
+            disabled={
+              preloader ||
+              !(sessionData && sessionData.company_signature === "")
+            }
           >
             Validate
           </Button>
@@ -104,6 +172,10 @@ const ValidateCard = () => {
               </FuseSvgIcon>
             }
             onClick={clear}
+            disabled={
+              preloader ||
+              !(sessionData && sessionData.company_signature === "")
+            }
           >
             Clear
           </Button>
