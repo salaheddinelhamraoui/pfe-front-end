@@ -11,7 +11,7 @@ const ValidateSessionAppConfig = {
   auth: authRoles.freelancer,
   routes: [
     {
-      path: "validate-session",
+      path: "validate-session-freelancer",
       element: <ValidateSession />,
     },
   ],

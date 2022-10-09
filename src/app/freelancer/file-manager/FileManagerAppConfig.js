@@ -10,7 +10,7 @@ const FileManagerAppConfig = {
   auth: authRoles.freelancer,
   routes: [
     {
-      path: "documents",
+      path: "documents-freelancer",
       element: <FileManagerApp />,
     },
   ],

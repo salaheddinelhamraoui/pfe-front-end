@@ -12,7 +12,7 @@ const Home = () => {
   }
 
   if (user && user.role === "freelancer") {
-    return <Navigate to="/home" />;
+    return <Navigate to="/home-freelancer" />;
   }
 
   if (user && user.role === "company") {

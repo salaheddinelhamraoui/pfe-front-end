@@ -1,12 +1,12 @@
-import i18next from 'i18next';
-import ar from './navigation-i18n/ar';
-import en from './navigation-i18n/en';
-import tr from './navigation-i18n/tr';
-import { authRoles } from '../auth';
+import i18next from "i18next";
+import ar from "./navigation-i18n/ar";
+import en from "./navigation-i18n/en";
+import tr from "./navigation-i18n/tr";
+import { authRoles } from "../auth";
 
-i18next.addResourceBundle('en', 'navigation', en);
-i18next.addResourceBundle('tr', 'navigation', tr);
-i18next.addResourceBundle('ar', 'navigation', ar);
+i18next.addResourceBundle("en", "navigation", en);
+i18next.addResourceBundle("tr", "navigation", tr);
+i18next.addResourceBundle("ar", "navigation", ar);
 
 const navigationConfig = [
   // {
@@ -27,100 +27,92 @@ const navigationConfig = [
   //   ],
   // },
   {
-    id: 'analytics',
-    title: 'Analytics',
-    type: 'item',
-    icon: 'heroicons-outline:clipboard-check',
+    id: "analytics",
+    title: "Analytics",
+    type: "item",
+    icon: "heroicons-outline:clipboard-check",
     auth: authRoles.admin,
-    url: '/project',
+    url: "/project",
   },
   {
-    id: 'freelancers',
-    title: 'Freelancers',
-    type: 'item',
-    icon: 'heroicons-outline:user-circle',
+    id: "freelancers",
+    title: "Freelancers",
+    type: "item",
+    icon: "heroicons-outline:user-circle",
     auth: authRoles.admin,
-    url: '/freelancers',
+    url: "/freelancers",
   },
   {
-    id: 'companies',
-    title: 'Companies',
-    type: 'item',
-    icon: 'heroicons-outline:office-building',
+    id: "companies",
+    title: "Companies",
+    type: "item",
+    icon: "heroicons-outline:office-building",
     auth: authRoles.admin,
-    url: '/companies',
+    url: "/companies",
   },
   {
-    id: 'projects',
-    title: 'Projects',
-    type: 'item',
-    icon: 'heroicons-outline:terminal',
+    id: "projects",
+    title: "Projects",
+    type: "item",
+    icon: "heroicons-outline:terminal",
     auth: authRoles.admin,
-    url: '/projects',
+    url: "/projects",
   },
   {
-    id: 'calendar',
-    title: 'Calendar',
-    type: 'item',
-    icon: 'heroicons-outline:calendar',
+    id: "calendar",
+    title: "Calendar",
+    type: "item",
+    icon: "heroicons-outline:calendar",
     auth: authRoles.admin,
-    url: '/calendar-admin',
+    url: "/calendar-admin",
   },
   {
-    id: 'home-freelancer',
-    title: 'Home',
-    type: 'item',
-    icon: 'heroicons-outline:home',
-    auth: authRoles.freelancer,
-    url: '/home',
-  },
-  {
-    id: 'calendar-freelancer',
-    title: 'Calendar',
-    type: 'item',
-    icon: 'heroicons-outline:calendar',
-    auth: authRoles.freelancer,
-    url: '/calendar',
-  },
-  {
-    id: 'clients-freelancer',
-    title: 'Clients',
-    type: 'item',
-    icon: 'heroicons-outline:user-group',
-    auth: authRoles.freelancer,
-    url: '/clients',
-  },
-  {
-    id: 'documents-freelancer',
-    title: 'Documents',
-    type: 'item',
-    icon: 'heroicons-outline:folder-open',
-    auth: authRoles.freelancer,
-    url: '/documents',
-  },
-  {
-    id: 'home-company',
-    title: 'Home',
-    type: 'item',
-    icon: 'heroicons-outline:home',
+    id: "home-company",
+    title: "Home",
+    type: "item",
+    icon: "heroicons-outline:home",
     auth: authRoles.company,
-    url: '/home-company',
+    url: "/home-company",
   },
   {
-    id: 'calendar-company',
-    title: 'Calendar',
-    type: 'item',
-    icon: 'heroicons-outline:calendar',
+    id: "calendar-company",
+    title: "Calendar",
+    type: "item",
+    icon: "heroicons-outline:calendar",
     auth: authRoles.company,
-    url: '/calendar-company',
+    url: "/calendar-company",
   },
   {
-    id: 'company-projects',
-    title: 'Projects',
-    type: 'item',
-    icon: 'heroicons-outline:terminal',
+    id: "company-projects",
+    title: "Projects",
+    type: "item",
+    icon: "heroicons-outline:terminal",
     auth: authRoles.company,
-    url: '/project-company',
+    url: "/project-company",
+  },
+  {
+    id: "home-freelancer",
+    title: "Home",
+    type: "item",
+    icon: "heroicons-outline:home",
+    auth: authRoles.freelancer,
+    url: "/home-freelancer",
+  },
+  {
+    id: "calendar-freelancer",
+    title: "Calendar",
+    type: "item",
+    icon: "heroicons-outline:calendar",
+    auth: authRoles.freelancer,
+    url: "/calendar-freelancer",
+  },
+  {
+    id: "freelancer-projects",
+    title: "Projects",
+    type: "item",
+    icon: "heroicons-outline:terminal",
+    auth: authRoles.freelancer,
+    url: "/project-freelancer",
   },
 ];
 

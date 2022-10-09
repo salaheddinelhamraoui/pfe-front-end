@@ -11,8 +11,11 @@ function SignCard({ session }) {
 
   useEffect(() => {
     let expirationDate = moment(session.date);
-    let now = moment();
-    let diff = expirationDate.diff(now, "minutes");
+    var localTime = moment().format("YYYY-MM-DD hh:mm"); // store localTime
+    let diff = expirationDate.local().diff(localTime, "minutes");
+
+    console.log("diff", diff);
+    console.log("proposedDate", localTime);
 
     if (diff < 15) {
       setReadyToSign(true);

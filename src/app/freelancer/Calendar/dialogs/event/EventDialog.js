@@ -1,29 +1,15 @@
+import {useState} from "react"
 import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
-import FuseUtils from '@fuse/utils/FuseUtils';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { useCallback, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import * as yup from 'yup';
 import _ from '@lodash';
 import { Popover } from '@mui/material';
 import FuseSvgIcon from '@fuse/core/FuseSvgIcon';
-import {
-  addEvent,
-  closeEditEventDialog,
-  closeNewEventDialog,
-  removeEvent,
-  selectEventDialog,
-  updateEvent,
-} from '../../store/eventsSlice';
 import EventLabelSelect from '../../EventLabelSelect';
-import EventModel from '../../model/EventModel';
-import { selectFirstLabelId } from '../../store/labelsSlice';
-
-const defaultValues = EventModel();
 
 /**
  * Form Validation Schema
@@ -33,15 +19,12 @@ const schema = yup.object().shape({
 });
 
 function EventDialog(props) {
-  const dispatch = useDispatch();
-  const eventDialog = useSelector(selectEventDialog);
-  const firstLabelId = useSelector(selectFirstLabelId);
-
   const { reset, formState, watch, control, getValues } = useForm({
-    defaultValues,
     mode: 'onChange',
     resolver: yupResolver(schema),
   });
+
+  const [dialogState, setDialogState] = useState(true);
 
   const { isValid, dirtyFields, errors } = formState;
 
@@ -50,77 +33,20 @@ function EventDialog(props) {
   const id = watch('id');
 
   /**
-   * Initialize Dialog with Data
-   */
-  const initDialog = useCallback(() => {
-    /**
-     * Dialog type: 'edit'
-     */
-    if (eventDialog.type === 'edit' && eventDialog.data) {
-      reset({ ...eventDialog.data });
-    }
-
-    /**
-     * Dialog type: 'new'
-     */
-    if (eventDialog.type === 'new') {
-      reset({
-        ...defaultValues,
-        ...eventDialog.data,
-        extendedProps: {
-          ...defaultValues.extendedProps,
-          label: firstLabelId,
-        },
-        id: FuseUtils.generateGUID(),
-      });
-    }
-  }, [eventDialog.data, eventDialog.type, reset]);
-
-  /**
-   * On Dialog Open
-   */
-  useEffect(() => {
-    if (eventDialog.props.open) {
-      initDialog();
-    }
-  }, [eventDialog.props.open, initDialog]);
-
-  /**
-   * Close Dialog
-   */
-  function closeComposeDialog() {
-    return eventDialog.type === 'edit'
-      ? dispatch(closeEditEventDialog())
-      : dispatch(closeNewEventDialog());
-  }
-
-  /**
    * Form Submit
    */
   function onSubmit(ev) {
     ev.preventDefault();
-    const data = getValues();
-    if (eventDialog.type === 'new') {
-      dispatch(addEvent(data));
-    } else {
-      dispatch(updateEvent({ ...eventDialog.data, ...data }));
-    }
-    closeComposeDialog();
   }
 
   /**
    * Remove Event
    */
-  function handleRemove() {
-    dispatch(removeEvent(id));
-    closeComposeDialog();
-  }
-
-  console.log(eventDialog.props);
+  function handleRemove() {}
 
   return (
     <Popover
-      {...eventDialog.props}
+      open={dialogState}
       anchorReference="anchorPosition"
       anchorOrigin={{
         vertical: 'center',
@@ -130,7 +56,11 @@ function EventDialog(props) {
         vertical: 'center',
         horizontal: 'left',
       }}
-      onClose={closeComposeDialog}
+      anchorPosition={{
+        top: 350,
+        left: 150,
+      }}
+      // onClose={closeComposeDialog}
       component="form"
     >
       <div className="flex flex-col max-w-full p-24 pt-32 sm:pt-40 sm:p-32 w-480">
@@ -199,26 +129,6 @@ function EventDialog(props) {
                 )}
               />
             </div>
-
-            {/* <Controller
-              name="allDay"
-              control={control}
-              render={({ field: { onChange, value } }) => (
-                <FormControlLabel
-                  className="mt-8"
-                  label="All Day"
-                  control={
-                    <Switch
-                      onChange={(ev) => {
-                        onChange(ev.target.checked);
-                      }}
-                      checked={value}
-                      name="allDay"
-                    />
-                  }
-                />
-              )}
-            /> */}
           </div>
         </div>
 
@@ -258,34 +168,20 @@ function EventDialog(props) {
           />
         </div>
 
-        {eventDialog.type === 'new' ? (
-          <div className="flex items-center space-x-8">
-            <div className="flex flex-1" />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onSubmit}
-              disabled={_.isEmpty(dirtyFields) || !isValid}
-            >
-              Add
-            </Button>
-          </div>
-        ) : (
-          <div className="flex items-center space-x-8">
-            <div className="flex flex-1" />
-            <IconButton onClick={handleRemove} size="large">
-              <FuseSvgIcon>heroicons-outline:trash</FuseSvgIcon>
-            </IconButton>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={onSubmit}
-              disabled={_.isEmpty(dirtyFields) || !isValid}
-            >
-              Save
-            </Button>
-          </div>
-        )}
+        <div className="flex items-center space-x-8">
+          <div className="flex flex-1" />
+          <IconButton onClick={handleRemove} size="large">
+            <FuseSvgIcon>heroicons-outline:trash</FuseSvgIcon>
+          </IconButton>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={onSubmit}
+            disabled={_.isEmpty(dirtyFields) || !isValid}
+          >
+            Save
+          </Button>
+        </div>
       </div>
     </Popover>
   );

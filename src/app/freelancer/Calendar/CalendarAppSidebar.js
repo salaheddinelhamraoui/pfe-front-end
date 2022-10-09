@@ -42,6 +42,7 @@ function CalendarAppSidebar() {
         </IconButton> */}
       </div>
 
+      {console.log(JSON.stringify(labels))}
 
       {[
         {

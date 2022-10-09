@@ -1,15 +1,17 @@
-import CalendarAppConfig from './Calendar/CalendarAppConfig';
-import HomeAppConfig from './home/HomeAppConfig';
-import ClientsAppConfig from './clients/ClientsAppConfig';
-import FileManagerAppConfig from './file-manager/FileManagerAppConfig';
-import ValidateSessionAppConfig from './validate-session/ValidateSessionAppConfig';
+import CalendarAppConfig from "./calendar/CalendarAppConfig";
+import HomeAppConfig from "./home/HomeAppConfig";
+import ValidateSessionAppConfig from "./validate-session/ValidateSessionAppConfig";
+import FreelancerAppConfig from "./freelancers/FreelacerAppConfig";
+import FileManagerAppConfig from "./file-manager/FileManagerAppConfig";
+import ProjectsAppConfig from "./projects/ProjectsAppConfig";
 
-const freelacerRoutes = [
+const companyRoutes = [
   CalendarAppConfig,
   HomeAppConfig,
-  ClientsAppConfig,
-  FileManagerAppConfig,
   ValidateSessionAppConfig,
+  FreelancerAppConfig,
+  FileManagerAppConfig,
+  ProjectsAppConfig,
 ];
 
-export default freelacerRoutes;
+export default companyRoutes;

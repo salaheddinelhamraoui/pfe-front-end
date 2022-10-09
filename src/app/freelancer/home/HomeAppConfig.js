@@ -1,16 +1,16 @@
-import { lazy } from 'react';
-import { authRoles } from '../../auth';
+import { lazy } from "react";
+import { authRoles } from "../../auth";
 
-const Home = lazy(() => import('./Home'));
+const Home = lazy(() => import("./Home"));
 
 const HomeAppConfig = {
   settings: {
-    layout: { style: 'layout2' },
+    layout: { style: "layout2" },
   },
   auth: authRoles.freelancer,
   routes: [
     {
-      path: 'home',
+      path: "home-freelancer",
       element: <Home />,
     },
   ],

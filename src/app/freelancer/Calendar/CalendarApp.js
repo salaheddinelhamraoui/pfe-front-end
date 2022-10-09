@@ -1,30 +1,21 @@
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import { selectUser } from "app/store/userSlice";
+import { useSelector } from "react-redux";
+import axios from "axios";
 import Typography from "@mui/material/Typography";
 import withReducer from "app/store/withReducer";
 import { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FusePageSimple from "@fuse/core/FusePageSimple";
-import _ from "@lodash";
 import clsx from "clsx";
 import { Box } from "@mui/system";
 import useThemeMediaQuery from "@fuse/hooks/useThemeMediaQuery";
 import CalendarHeader from "./CalendarHeader";
-import EventDialog from "./dialogs/event/EventDialog";
 import reducer from "./store";
-import {
-  getEvents,
-  openEditEventDialog,
-  openNewEventDialog,
-  selectFilteredEvents,
-  updateEvent,
-} from "./store/eventsSlice";
-import { getLabels, selectLabels } from "./store/labelsSlice";
-import LabelsDialog from "./dialogs/labels/LabelsDialog";
-import CalendarAppSidebar from "./CalendarAppSidebar";
 
 const Root = styled(FusePageSimple)(({ theme }) => ({
   "& a": {
@@ -99,23 +90,26 @@ const Root = styled(FusePageSimple)(({ theme }) => ({
 }));
 
 function CalendarApp(props) {
+  const navigate = useNavigate();
   const [currentDate, setCurrentDate] = useState();
-  const dispatch = useDispatch();
-  const events = useSelector(selectFilteredEvents);
   const calendarRef = useRef();
   const isMobile = useThemeMediaQuery((theme) => theme.breakpoints.down("lg"));
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(!isMobile);
-  const theme = useTheme();
-  const labels = useSelector(selectLabels);
-
-  useEffect(() => {
-    dispatch(getEvents());
-    dispatch(getLabels());
-  }, [dispatch]);
+  const [events, setEvents] = useState();
+  const user = useSelector(selectUser);
 
   useEffect(() => {
     setLeftSidebarOpen(!isMobile);
   }, [isMobile]);
+
+  useEffect(() => {
+    axios
+      .get(
+        `${process.env.REACT_APP_API_URL}/findSessionByUserIdFreelancer/${user._id}`
+      )
+      .then((res) => setEvents(res.data.result))
+      .catch((err) => console.log(err));
+  }, []);
 
   useEffect(() => {
     // Correct calendar dimentions after sidebar toggles
@@ -126,65 +120,30 @@ function CalendarApp(props) {
 
   const handleDateSelect = (selectInfo) => {
     const { start, end } = selectInfo;
-    dispatch(openNewEventDialog(selectInfo));
   };
 
-  const handleEventDrop = (eventDropInfo) => {
-    const { id, title, allDay, start, end, extendedProps } =
-      eventDropInfo.event;
-    dispatch(
-      updateEvent({
-        id,
-        title,
-        allDay,
-        start,
-        end,
-        extendedProps,
-      })
-    );
-  };
   const handleEventClick = (clickInfo) => {
-    dispatch(openEditEventDialog(clickInfo));
+    navigate(
+      `/project-details-freelancer/${clickInfo.event._def.extendedProps.project_id}`
+    );
   };
 
   function renderEventContent(eventInfo) {
-    const labelId = eventInfo.event.extendedProps.label;
-    const label = _.find(
-      [
-        {
-          "id": "0",
-          "title": "Project 1",
-          "color": "#419388",
-        },
-        {
-          "id": "1",
-          "title": "Project 2",
-          "color": "#4151B0",
-        },
-        {
-          "id": "2",
-          "title": "Project 3",
-          "color": "#D63E63",
-        },
-      ],
-      { id: labelId }
-    );
-
     return (
       <Box
         sx={{
-          backgroundColor: label?.color,
-          color: label && theme.palette.getContrastText(label?.color),
+          backgroundColor: "#4151B0",
+          color: "#4151B0",
         }}
         className={clsx(
           "flex items-center w-full rounded-4 px-8 py-2 h-22 text-white"
         )}
       >
         <Typography className="text-12 font-semibold">
-          {eventInfo.timeText}
+          {eventInfo.event._def.title}
         </Typography>
         <Typography className="text-12 px-4 truncate">
-          {eventInfo.event.title}
+          {eventInfo.event._def.extendedProps.description}
         </Typography>
       </Box>
     );
@@ -200,64 +159,39 @@ function CalendarApp(props) {
 
   const handleEventRemove = (removeInfo) => {};
 
-  function handleToggleLeftSidebar() {
-    setLeftSidebarOpen(!leftSidebarOpen);
-  }
-
   return (
     <>
-      {console.log(JSON.stringify(events))}
       <Root
         header={
-          <CalendarHeader
-            calendarRef={calendarRef}
-            currentDate={currentDate}
-            onToggleLeftSidebar={handleToggleLeftSidebar}
-          />
+          <CalendarHeader calendarRef={calendarRef} currentDate={currentDate} />
         }
         content={
-          <FullCalendar
-            plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
-            headerToolbar={false}
-            initialView="dayGridMonth"
-            editable
-            selectable
-            selectMirror
-            dayMaxEvents
-            weekends
-            datesSet={handleDates}
-            select={handleDateSelect}
-            events={[
-              {
-                "id": "0",
-                "title": "Session Title",
-                "allDay": false,
-                "start": "2022-08-06T00:00:00+03:00",
-                "end": "2022-08-06T00:00:00+06:00",
-                "extendedProps": {
-                  "desc": "Session description",
-                  "label": "0",
-                },
-              },
-            ]}
-            eventContent={renderEventContent}
-            eventClick={handleEventClick}
-            eventAdd={handleEventAdd}
-            eventChange={handleEventChange}
-            eventRemove={handleEventRemove}
-            eventDrop={handleEventDrop}
-            initialDate={new Date()}
-            ref={calendarRef}
-          />
+          <>
+            {console.log(events)}
+            <FullCalendar
+              plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
+              headerToolbar={false}
+              initialView="dayGridMonth"
+              editable
+              selectable
+              selectMirror
+              dayMaxEvents
+              weekends
+              datesSet={handleDates}
+              select={handleDateSelect}
+              events={events && events}
+              eventContent={renderEventContent}
+              eventClick={handleEventClick}
+              eventAdd={handleEventAdd}
+              eventChange={handleEventChange}
+              eventRemove={handleEventRemove}
+              initialDate={new Date()}
+              ref={calendarRef}
+            />
+          </>
         }
-        leftSidebarContent={<CalendarAppSidebar />}
-        leftSidebarOpen={leftSidebarOpen}
-        leftSidebarOnClose={() => setLeftSidebarOpen(false)}
-        leftSidebarWidth={240}
         scroll="content"
       />
-      <EventDialog />
-      <LabelsDialog />
     </>
   );
 }
