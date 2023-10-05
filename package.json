@@ -105,7 +105,7 @@
         "eslint-plugin-react-hooks": "^4.2.0",
         "eslint-plugin-unused-imports": "^1.1.5",
         "immutable": "4.0.0",
-        "postcss": "8.4.5",
+        "postcss": "8.4.31",
         "prettier": "^2.4.1",
         "promise": "8.1.0",
         "react-app-alias": "2.2.0",
